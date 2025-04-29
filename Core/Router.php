@@ -29,6 +29,10 @@ class Router
      */
     public function add(string $route, array $params): void
     {
+        // Convert {id}'s from endpoint / route to regex group
+        $route = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
+        $route = '#^' . $route . '$#';
+        
         // Check if method is given - else set to GET
         if (!isset($params['method'])) {
             $params['method'] = 'GET';
@@ -44,6 +48,29 @@ class Router
      */
     public function match(string $url, string $method): bool
     {
+        // Loop through all registered routes
+        foreach ($this->routes as $pattern => $params) {
+
+            // Check if the current route pattern matches the requested URL
+            if (preg_match($pattern, $url, $matches)) {
+
+                // Make sure the HTTP method also matches
+                if ($params['method'] === $method) {
+
+                    // Extract named parameters from the regex match (e.g. ['album_id' => '42']) from regex
+                    foreach ($matches as $key => $match) {
+                        if (is_string($key)) {
+                            $params[$key] = $match; // Add to route params
+                        }
+                    }
+                    $this->params = $params;
+                    return true;
+                }
+            }
+        }
+    
+        return false;
+
         // // If the URL ends in an ID, it is extracted
         // $parts = explode('/', $url);
         // $lastPart = end($parts);
@@ -54,14 +81,14 @@ class Router
         //     $id = 0;
         // }
 
-        if(isset($this->routes[$url]) && $this->routes[$url]['method'] === $method) {
-            $this->params = $this->routes[$url];
-            // if($id!==0) {
-            //     $this->params['id'] = $id;
-            // }
-            return true;
-        }
-        return false;
+        // if(isset($this->routes[$url]) && $this->routes[$url]['method'] === $method) {
+        //     $this->params = $this->routes[$url];
+        //     // if($id!==0) {
+        //     //     $this->params['id'] = $id;
+        //     // }
+        //     return true;
+        // }
+        // return false;
     }
 
     /**
