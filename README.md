@@ -1,4 +1,4 @@
-# PHP exam projet - API for music storage
+# PHP exam project - API for music storage
 
 ## Data
 
@@ -8,6 +8,8 @@ Data from Chinook database:
 ## Author
 
 Freja Fischer Nielsen
+
+## Tech
 
 Made in the MVC pattern in PHP version 8.3.14
 
