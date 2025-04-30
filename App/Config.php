@@ -14,6 +14,8 @@ abstract class Config
     public static string $DB_USER;
     public static string $DB_PASSWORD;
     public static string $DB_PORT;
+
+    public static array $API_KEYS;
     
     // const BASE_URL = '/exam/music_storage/public/';
 
@@ -29,6 +31,10 @@ abstract class Config
         self::$DB_USER = Env::getEnvVariable('DB_USER');
         self::$DB_PASSWORD = Env::getEnvVariable('DB_PASS');
         self::$DB_PORT = Env::getEnvVariable('DB_PORT');
+
+        // Load API keys
+        $keys = Env::getEnvVariable('API_KEYS'); // comma-separated string
+        self::$API_KEYS = array_map('trim', explode(',', $keys)); // Convert to array
     }
     
 }

@@ -5,6 +5,7 @@
  */
 
  namespace Core;
+ use App\Config;
 
  abstract class Controller
  {
@@ -13,6 +14,9 @@
     public function __construct(array $routeParams)
     {
         header('Content-Type: application/json');
+
+        // Check if route requires API key
+        $this->requiresApiKey();
 
         // When instantiated, sets routes parameters
         $this->routeParams = $routeParams;
@@ -51,4 +55,29 @@
         ]);
         exit;
     }
+
+    /**
+     * Method for handling the need for an API key
+     */
+    private function requiresApiKey(): void
+    {
+        // Whitelisted public paths (no key required)
+        $publicPaths = ['/exam/music_storage/public/']; // The base of the API
+
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        if (in_array($path, $publicPaths)) {
+            return; // Skip API key check
+        }
+
+        // Check if API key is given and is valid
+        $providedKey = $_GET['api_key'] ?? null;
+
+        if (!in_array($providedKey, Config::$API_KEYS)) {
+            http_response_code(403);
+            $this->jsonError('Forbidden: Invalid or missing API key', 403);
+            exit;
+        }
+    }
+
  }
