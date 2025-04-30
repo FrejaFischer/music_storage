@@ -7,8 +7,8 @@ namespace Core;
  */
 class Router
 {
-    protected array $routes = []; // the route
-    protected array $params = []; // the params for 
+    protected array $routes = []; // the routes
+    protected array $params = []; // the params for the routes
 
     // Is this nessesary?
     // public function __get(string $property): array|false
@@ -106,12 +106,12 @@ class Router
             $controller = $this->params['controller'];
             $controller = "App\Controllers\\$controller";
 
-            // Check if the controllers class exists
+            // Check if the controller class exists
             if (class_exists($controller)) {
                 $controllerInstance = new $controller($this->params);
                 $action = $this->params['action'];
 
-                // Check if the controller instance is callable
+                // Check if the controllers class is callable
                 if (is_callable([$controllerInstance, $action])) {
                     $controllerInstance->$action();
                     return true;
