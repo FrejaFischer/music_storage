@@ -8,6 +8,11 @@ class Homes extends \Core\Controller
     public function indexAction(): void
     {
         $albums = Home::getAll();
-        require "test.php";
+        
+        if (!$albums) {
+            $this->jsonError('No albums found', 404);
+        }
+
+        $this->jsonResponse($albums);
     }
 }
