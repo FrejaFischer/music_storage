@@ -5,7 +5,7 @@ namespace App;
 use Core\Env;
 abstract class Config
 {
-    const SHOW_ERRORS = false;
+    const SHOW_ERRORS = true; // true = Development mode, false = Production mode
     
     public static string $ROOT_PATH;
 

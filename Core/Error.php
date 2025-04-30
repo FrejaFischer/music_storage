@@ -20,7 +20,7 @@
         }
     }
 
-    public static function exceptionHandler(\Throwable $exception): string
+    public static function exceptionHandler(\Throwable $exception): void
     {
         // HTTP status codes are treated
         $code = $exception->getCode();
@@ -40,14 +40,16 @@
         </section>
         EXCEPTION;
 
-        // The information is either shown or logged
+        // The information is either logged or returned as json (Development or Production mode)
         if (\App\Config::SHOW_ERRORS) {
-            return '<p>error meesage</p>';
-        } else {
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
             ini_set('error_log', $log);
             error_log("$exceptionInfo<hr>");
-            return 'log';
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
         }
     }
  }
