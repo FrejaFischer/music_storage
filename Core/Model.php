@@ -5,31 +5,62 @@
 */
 
 namespace Core;
+
 use PDO;
+use PDOException;
+use App\Config;
 
-use Exception;
-
- class Model extends \App\Config
+abstract class Model
  {
-    public function getDB(): PDO
+    protected static function getDB(): PDO
     {
         static $db = null;
 
         if ($db === null) {
             try {
-                parent::__construct(); // Call parent constructor to load env variables
+                $dsn = 'mysql:host=' . Config::$DB_HOST .
+                    ';port=' . Config::$DB_PORT .
+                    ';dbname=' . Config::$DB_NAME .
+                    ';charset=utf8';
 
-                $dsn = 'mysql:host' . $this->host . ';port=' . $this->port .
-                ';dbname=' . $this->dbname . 
-                ';charset=utf8';
-                $db = new PDO($dsn, $this->user, $this->password);
-
+                $db = new PDO($dsn, Config::$DB_USER, Config::$DB_PASSWORD);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (Exception $e) {
+            } catch (PDOException $e) {
                 throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class());
             }
         }
 
         return $db;
+    }
+    
+     /**
+     * For SELECTs, it returns the query results as an associative array.
+     * For INSERTs, it returns the new PK value.
+     * For DELETEs, it returns whether some rows has been affected.
+     */
+    protected static function execute(string $sql, array $params = []): array|int
+    {
+        $db = static::getDB();
+
+        if (empty($params)) {
+            $stmt = $db->query($sql);
+        } else {
+            $stmt = $db->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":{$key}", $value);
+            }
+            $stmt->execute();
+        }
+
+        switch (substr(ltrim($sql), 0, 6)) {
+            case 'SELECT':
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            case 'INSERT':
+                return $db->lastInsertId();
+            case 'DELETE':
+                return $stmt->rowCount() > 0;
+            default:
+                return 0;
+        }
     }
  }
