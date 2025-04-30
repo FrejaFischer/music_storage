@@ -70,25 +70,6 @@ class Router
         }
     
         return false;
-
-        // // If the URL ends in an ID, it is extracted
-        // $parts = explode('/', $url);
-        // $lastPart = end($parts);
-        // if(is_numeric($lastPart)) {
-        //     $id = $lastPart;
-        //     $url = substr($url, 0, strlen($url) - (strlen($lastPart) + 1));
-        // } else {
-        //     $id = 0;
-        // }
-
-        // if(isset($this->routes[$url]) && $this->routes[$url]['method'] === $method) {
-        //     $this->params = $this->routes[$url];
-        //     // if($id!==0) {
-        //     //     $this->params['id'] = $id;
-        //     // }
-        //     return true;
-        // }
-        // return false;
     }
 
     /**

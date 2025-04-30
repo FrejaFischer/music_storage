@@ -35,30 +35,37 @@ $router->add('',[
     'controller' => 'Homes',
     'action' => 'index'
 ]);
+$router->add('artists',[
+    'controller' => 'Artists',
+    'action' => 'get'
+]);
 
 /**
  * Route dispatch
  */
-$url = $_SERVER['QUERY_STRING'];
 
-// Another solution for getting the url (maybe nessesary when building an API?)
-// // Extract the route from the URI, stripping off base path and query string
-// $requestUri = $_SERVER['REQUEST_URI'];
-// $scriptName = $_SERVER['SCRIPT_NAME'];
-// $basePath   = dirname($scriptName); // e.g. /php_mvc_library/public
+// Extract the route from the URI, stripping off base path and query string
+$requestUri = $_SERVER['REQUEST_URI']; // e.g. /exam/music_storage/public/artists
+$scriptName = $_SERVER['SCRIPT_NAME']; // e.g. /exam/music_storage/public/index.php
+$basePath   = dirname($scriptName); // e.g. /exam/music_storage/public
 
-// // Remove base path from URI
-// $relativeUrl = preg_replace('#^' . preg_quote($basePath) . '/?#', '', $requestUri);
+// Remove base path from URI - Get the endpoint
+$relativeUrl = preg_replace('#^' . preg_quote($basePath) . '/?#', '', $requestUri); // e.g. artists (with query params if present)
 
-// // Remove query string
-// $url = strtok($relativeUrl, '?');
-
-//// DEBUGGING WITH LOGGING ////
-// $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
-// // Format the log entry (you can customize this)
-// $entry = date('H:i:s') . " - " . htmlspecialchars($url) . "<br>\n";
-// // Append to the log file
-// file_put_contents($log, $entry, FILE_APPEND);
+// Remove query string
+$url = strtok($relativeUrl, '?'); // e.g. artists
 
 $method = $_SERVER['REQUEST_METHOD'];
 $router->dispatch($url, $method);
+
+// // DEBUGGING WITH LOGGING ////
+// $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
+// // Format the log entry (you can customize this)
+// $entry = date('H:i:s') . " - " . htmlspecialchars($relativeUrl) . "<br>\n";
+// // Append to the log file
+// file_put_contents($log, $entry, FILE_APPEND);
+
+// // OLD METHOD ////
+// $url = $_SERVER['QUERY_STRING'];
+// $method = $_SERVER['REQUEST_METHOD'];
+// $router->dispatch($url, $method);
