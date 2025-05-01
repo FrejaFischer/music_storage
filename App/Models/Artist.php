@@ -22,4 +22,23 @@ class Artist extends \Core\Model
             }
         }
     }
+
+    public static function search(string $searchText): array
+    {
+        try {
+            $sql = <<<'SQL'
+                SELECT * FROM Artist WHERE Name LIKE :search;
+            SQL;
+
+            return self::execute($sql, [
+                'search' => "%$searchText%"
+            ]);
+        } catch (PDOException $e) {
+            if (\App\Config::SHOW_ERRORS) {
+                throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class());
+            } else {
+                throw new \Exception(self::DB_SQL_ERROR);
+            }
+        }
+    }
 }
