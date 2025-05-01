@@ -2,12 +2,12 @@
 
 /**
  * Error and exception handler
- */
+*/
 
- namespace Core;
-
- class Error 
- {
+namespace Core;
+use Core\ResponseHelper;
+class Error 
+{
     /**
      * Errors are turned into exceptions
      */
@@ -24,7 +24,7 @@
     {
         // HTTP status codes are treated
         $code = $exception->getCode();
-        if ($code !== 404) {
+        if (!$code) {
             $code = 500;
         }
         http_response_code($code);
@@ -42,18 +42,17 @@
 
         // The information is either logged or returned as json (Development or Production mode)
         if (\App\Config::SHOW_ERRORS) {
+            ResponseHelper::jsonError($exception->getMessage());
+
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
             ini_set('error_log', $log);
             error_log("$exceptionInfo<hr>");
         } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => $exception->getMessage()
-            ]);
+            ResponseHelper::jsonError($exception->getMessage());
             
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
             ini_set('error_log', $log);
             error_log("$exceptionInfo<hr>");
         }
     }
- }
+}

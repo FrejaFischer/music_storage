@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\Home;
+use Core\ResponseHelper;
 
 class Homes extends \Core\Controller
 {
@@ -10,9 +11,9 @@ class Homes extends \Core\Controller
         $albums = Home::getAll();
         
         if (!$albums) {
-            $this->jsonError('No albums found', 404);
+            throw new \Exception('No albums found', 404);
         }
 
-        $this->jsonResponse($albums);
+        ResponseHelper::jsonResponse($albums);
     }
 }

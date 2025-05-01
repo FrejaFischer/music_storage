@@ -32,28 +32,8 @@
             // (or nothing if there is no arguments)
             call_user_func_array([$this, $method], $args); 
         } else {
-            throw new \Exception("Method $method not found in controller " . get_class($this));
+            throw new \Exception("Method $method not found in controller " . get_class($this), 500);
         }
-    }
-
-    protected function jsonResponse(mixed $data, int $statusCode = 200): void
-    {
-        http_response_code($statusCode);
-        echo json_encode([
-            'status' => 'success',
-            'data' => $data
-        ]);
-        exit;
-    }
-
-    protected function jsonError(string $message, int $statusCode = 400): void
-    {
-        http_response_code($statusCode);
-        echo json_encode([
-            'status' => 'error',
-            'message' => $message
-        ]);
-        exit;
     }
 
     /**
@@ -74,8 +54,7 @@
         $providedKey = $_GET['api_key'] ?? null;
 
         if (!in_array($providedKey, Config::$API_KEYS)) {
-            http_response_code(403);
-            $this->jsonError('Forbidden: Invalid or missing API key', 403);
+            throw new \Exception('Forbidden: Invalid or missing API key', 403);
             exit;
         }
     }
