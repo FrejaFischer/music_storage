@@ -97,10 +97,10 @@ class Router
                     $controllerInstance->$action();
                     return true;
                 } else {
-                    throw new \Exception("Method $action in controller $controller not found");
+                    throw new \Exception("Method $action in controller $controller not found", 500);
                 }
             } else {
-                throw new \Exception("Controller class $controller not found");
+                throw new \Exception("Controller class $controller not found", 500);
             }
         } else {
             throw new \Exception("URL $url not found", 404);

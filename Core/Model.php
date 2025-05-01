@@ -32,9 +32,9 @@ abstract class Model
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 if (\App\Config::SHOW_ERRORS) {
-                    throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class());
+                    throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class(), 500);
                 } else {
-                    throw new \Exception(self::DB_CONN_ERROR);
+                    throw new \Exception(self::DB_CONN_ERROR, 500);
                 }
             }
         }
