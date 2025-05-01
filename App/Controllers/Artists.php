@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\Artist;
+use Core\ResponseHelper;
 
 class Artists extends \Core\Controller
 {
@@ -19,10 +20,34 @@ class Artists extends \Core\Controller
         }
         
         if (!$artists) {
-            $this->jsonError('No artists found', 404);
+            throw new \Exception('No artists found', 404);
         }
 
-        $this->jsonResponse($artists);
+        ResponseHelper::jsonResponse($artists);
+    }
+
+    public function findAction(): void
+    {
+        $artistID = $this->routeParams['artist_id'] ?? null;
+
+        // Check if there is an id in the route path
+        if (!$artistID) {
+            throw new \Exception('Missing artist ID', 400);
+            return;
+        }
+        // Check if the id is numeric
+        if (!ctype_digit($artistID)) {
+            throw new \Exception('Invalid artist ID format', 400);
+            return;
+        }
+
+        $artist = Artist::get($artistID);
+
+        if (!$artist) {
+            throw new \Exception('No artist found with that ID', 404);
+        }
+
+        ResponseHelper::jsonResponse($artist);
     }
 
 }

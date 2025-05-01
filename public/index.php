@@ -39,6 +39,10 @@ $router->add('artists',[
     'controller' => 'Artists',
     'action' => 'get'
 ]);
+$router->add('artists/{artist_id}',[
+    'controller' => 'Artists',
+    'action' => 'find'
+]);
 
 /**
  * Route dispatch
