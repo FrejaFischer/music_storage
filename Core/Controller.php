@@ -62,7 +62,7 @@
     private function requiresApiKey(): void
     {
         // Whitelisted public paths (no key required)
-        $publicPaths = ['/exam/music_storage/public/']; // The base of the API
+        $publicPaths = [Config::$BASE_URL]; // The base of the API
 
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
