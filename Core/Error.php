@@ -50,6 +50,10 @@
                 'status' => 'error',
                 'message' => $exception->getMessage()
             ]);
+            
+            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
+            ini_set('error_log', $log);
+            error_log("$exceptionInfo<hr>");
         }
     }
  }
