@@ -1,15 +1,17 @@
 <?php
 
-namespace Core;
+namespace App\Helpers;
 
 class ResponseHelper
 {
-    public static function jsonResponse(mixed $data, int $statusCode = 200): void
+    public static function jsonResponse(mixed $data, array $links, ?int $statusCode = 200): void
     {
         http_response_code($statusCode);
+
         echo json_encode([
             'status' => 'success',
-            'data' => $data
+            'data' => $data,
+            '_links' => $links
         ]);
         exit;
     }
