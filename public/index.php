@@ -52,7 +52,7 @@ $router->add('artists/{artist_id}',[
 ]);
 $router->add('artists/{artist_id}/albums',[
     'controller' => 'Artists',
-    'action' => 'find'
+    'action' => 'album'
 ]);
 
 

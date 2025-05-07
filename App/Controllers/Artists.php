@@ -29,19 +29,7 @@ class Artists extends \Core\Controller
 
     public function findAction(): void
     {
-        $artistID = $this->routeParams['artist_id'] ?? null;
-
-        // Check if there is an id in the route path
-        if (!$artistID) {
-            ResponseHelper::jsonError('Missing artist ID');
-            throw new \Exception('Missing artist ID', 400);
-            return;
-        }
-        // Check if the id is numeric
-        if (!ctype_digit($artistID)) {
-            throw new \Exception('Invalid artist ID format', 400);
-            return;
-        }
+        $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
 
         $artist = Artist::get($artistID);
 
@@ -51,6 +39,30 @@ class Artists extends \Core\Controller
         }
 
         ResponseHelper::jsonResponse($artist);
+    }
+
+    public function albumAction(): void
+    {
+        $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
+
+        // Check if artist exist
+        $artist = Artist::get($artistID);
+
+        if (!$artist) {
+            ResponseHelper::jsonError('No artist found with that ID');
+            throw new \Exception('No artist found with that ID', 404);
+        }
+
+        // Get artists albums
+        $artistsAlbums = Artist::getAlbums($artistID);
+
+        if (!$artistsAlbums) {
+                ResponseHelper::jsonError('No albums found for that artist ID');
+                throw new \Exception('No artist found with that ID', 404);
+        }
+
+        ResponseHelper::jsonResponse($artistsAlbums);
+
     }
 
 }

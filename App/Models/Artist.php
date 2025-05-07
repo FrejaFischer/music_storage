@@ -34,4 +34,15 @@ class Artist extends \Core\Model
             'artistID' => $artistID
         ]);
     }
+
+    public static function getAlbums(int $artistID): array
+    {
+        $sql = <<<'SQL'
+        SELECT * FROM Album WHERE ArtistId = :artistID
+        SQL;
+
+        return self::execute($sql, [
+            'artistID' => $artistID
+        ]);
+    }
 }
