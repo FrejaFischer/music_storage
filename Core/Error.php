@@ -5,6 +5,9 @@
 */
 
 namespace Core;
+
+use App\Config;
+
 class Error 
 {
     /**
@@ -44,7 +47,12 @@ class Error
         EXCEPTION;
 
         // Log the exception
-        $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
+        if (Config::ENVIRONMENT === 'dev') {
+            $log = Config::$ROOT_PATH . '/logs/' . date('Y-m-d') . '.html';
+        } else {
+            // Path for the logs in production
+            $log = Config::$ROOT_PATH . '/api/logs/' . date('Y-m-d') . '.html';
+        }
         ini_set('error_log', $log);
         error_log("$exceptionInfo<hr>");
     }
