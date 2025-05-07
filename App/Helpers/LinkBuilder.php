@@ -147,7 +147,7 @@ class LinkBuilder
      * @param int $trackID - track id from the request
      * @return array - links for HATEOAS response
      */
-    public static function playlistLinks(int $playlistID, ?string $self = null, int $trackID): array
+    public static function playlistLinks(int $playlistID, int $trackID, ?string $self = null): array
     {
         $selfLink = $self ? $self : "/playlists/$playlistID";
 
