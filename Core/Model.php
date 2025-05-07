@@ -47,27 +47,33 @@ abstract class Model
      */
     protected static function execute(string $sql, array $params = []): array|int
     {
-        $db = static::getDB();
-
-        if (empty($params)) {
-            $stmt = $db->query($sql);
-        } else {
-            $stmt = $db->prepare($sql);
-            foreach ($params as $key => $value) {
-                $stmt->bindValue(":{$key}", $value);
+        try {
+            $db = static::getDB();
+    
+            if (empty($params)) {
+                $stmt = $db->query($sql);
+            } else {
+                $stmt = $db->prepare($sql);
+                foreach ($params as $key => $value) {
+                    $stmt->bindValue(":{$key}", $value);
+                }
+                $stmt->execute();
             }
-            $stmt->execute();
-        }
+    
+            switch (substr(ltrim($sql), 0, 6)) {
+                case 'SELECT':
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                case 'INSERT':
+                    return $db->lastInsertId();
+                case 'DELETE':
+                    return $stmt->rowCount() > 0;
+                default:
+                    return 0;
+            }
+        } catch (PDOException $e) {
+            ResponseHelper::jsonError(self::DB_SQL_ERROR);
 
-        switch (substr(ltrim($sql), 0, 6)) {
-            case 'SELECT':
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            case 'INSERT':
-                return $db->lastInsertId();
-            case 'DELETE':
-                return $stmt->rowCount() > 0;
-            default:
-                return 0;
+            throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class(), 500);
         }
     }
  }
