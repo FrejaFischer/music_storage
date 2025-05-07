@@ -1,3 +1,3 @@
-logs/*.html
+logs/*/*.html
 .env
 production/

@@ -27,6 +27,35 @@ spl_autoload_register(function ($class) {
 set_error_handler('Core\Error::errorHandler');
 set_exception_handler('Core\Error::exceptionHandler');
 
+
+/**
+ * Logging all requests
+ */
+use Core\Logger;
+
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+$requestUri    = $_SERVER['REQUEST_URI'];
+$queryString   = $_SERVER['QUERY_STRING'] ?? '';
+$clientIp      = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$timestamp = date("Y-m-d H:i:s A"); // current timestamp
+
+$requestInfo = <<<INFO
+$timestamp <br>
+---------------------------------------------<br>
+---------------------------------------------
+<section>
+    <p>Request method: $requestMethod</p>
+    <p>Request Uri: $requestUri</p>
+    <p>Query Strings (if any): $queryString</p>
+    <p>Client Ip (if found): $clientIp</p>
+</section>
+---------------------------------------------<br>
+---------------------------------------------
+INFO;
+
+Logger::LogRequest($requestInfo);
+
+
 /**
  * Set content type in header to expect JSON
  */
@@ -83,17 +112,5 @@ $relativeUrl = preg_replace('#^' . preg_quote($basePath) . '/?#', '', $requestUr
 // Remove query string
 $url = strtok($relativeUrl, '?'); // e.g. artists
 
-$method = $_SERVER['REQUEST_METHOD'];
-$router->dispatch($url, $method);
-
-// // DEBUGGING WITH LOGGING ////
-// $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
-// // Format the log entry (you can customize this)
-// $entry = date('H:i:s') . " - " . htmlspecialchars($relativeUrl) . "<br>\n";
-// // Append to the log file
-// file_put_contents($log, $entry, FILE_APPEND);
-
-// // OLD METHOD ////
-// $url = $_SERVER['QUERY_STRING'];
 // $method = $_SERVER['REQUEST_METHOD'];
-// $router->dispatch($url, $method);
+$router->dispatch($url, $requestMethod);
