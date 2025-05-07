@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\Artist;
-use Core\ResponseHelper;
+use App\Helpers\ResponseHelper;
+use App\Helpers\LinkBuilder;
 
 class Artists extends \Core\Controller
 {
@@ -15,8 +17,10 @@ class Artists extends \Core\Controller
 
         if($search) {
             $artists = Artist::search($search);
+            $links = LinkBuilder::artistCollectionLinks('/artists?s={search}'); // Get HATEOAS links
         } else {
             $artists = Artist::getAll();
+            $links = LinkBuilder::artistCollectionLinks(); // Get HATEOAS links
         }
         
         if (!$artists) {
@@ -24,7 +28,7 @@ class Artists extends \Core\Controller
             throw new \Exception('No artists found', 404);
         }
 
-        ResponseHelper::jsonResponse($artists);
+        ResponseHelper::jsonResponse($artists, $links);
     }
 
     public function findAction(): void
@@ -38,7 +42,9 @@ class Artists extends \Core\Controller
             throw new \Exception('No artist found with that ID', 404);
         }
 
-        ResponseHelper::jsonResponse($artist);
+        $links = LinkBuilder::artistLinks($artistID); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($artist, $links);
     }
 
     public function albumAction(): void
@@ -61,7 +67,9 @@ class Artists extends \Core\Controller
                 throw new \Exception('No artist found with that ID', 404);
         }
 
-        ResponseHelper::jsonResponse($artistsAlbums);
+        $links = LinkBuilder::artistLinks($artistID, "/artists/$artistID/albums"); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($artistsAlbums, $links);
 
     }
 

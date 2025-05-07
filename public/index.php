@@ -37,11 +37,13 @@ header('Content-Type: application/json');
  */
 $router = new Core\Router();
 
-//// Artists ////
+//// Root ////
 $router->add('',[
-    'controller' => 'Homes',
+    'controller' => 'Indexs',
     'action' => 'index'
 ]);
+
+//// Artists ////
 $router->add('artists',[
     'controller' => 'Artists',
     'action' => 'get'
@@ -56,9 +58,7 @@ $router->add('artists/{artist_id}/albums',[
 ]);
 
 
-/**
- * Fake routes for testing
- */
+//// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',
     'action' => 'get'
