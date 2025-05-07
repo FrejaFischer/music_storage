@@ -1,3 +1,4 @@
 logs/*/*.html
 .env
 production/
+.DS_Store

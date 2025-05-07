@@ -13,9 +13,7 @@ class Logger
      */
     private static function getLogPath(string $type): string|false
     {
-        $baseDir = Config::ENVIRONMENT === 'dev' 
-            ? Config::$ROOT_PATH . "/logs/$type/" 
-            : Config::$ROOT_PATH . "/api/logs/$type/";
+        $baseDir = Config::$LOG_PATH . $type . '/';
         
         return $baseDir . date('Y-m-d') . '.html';
     }
