@@ -28,9 +28,16 @@ set_error_handler('Core\Error::errorHandler');
 set_exception_handler('Core\Error::exceptionHandler');
 
 /**
+ * Set content type in header to expect JSON
+ */
+header('Content-Type: application/json');
+
+/**
  * Routing
  */
 $router = new Core\Router();
+
+//// Artists ////
 $router->add('',[
     'controller' => 'Homes',
     'action' => 'index'
@@ -42,6 +49,23 @@ $router->add('artists',[
 $router->add('artists/{artist_id}',[
     'controller' => 'Artists',
     'action' => 'find'
+]);
+$router->add('artists/{artist_id}/albums',[
+    'controller' => 'Artists',
+    'action' => 'find'
+]);
+
+
+/**
+ * Fake routes for testing
+ */
+$router->add('test',[
+    'controller' => 'test',
+    'action' => 'get'
+]);
+$router->add('test2',[
+    'controller' => 'Artists',
+    'action' => 'test'
 ]);
 
 /**
