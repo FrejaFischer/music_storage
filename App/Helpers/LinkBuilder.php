@@ -12,14 +12,16 @@ class LinkBuilder
      * links for /artists/{id} resources
      * @param int $artistID - id from the request
      * @param string (optional) $self - the current endpoint
+     * @param string (optional) $method - the method of current endpoint
      * @return array - links for HATEOAS response
      */
-    public static function artistLinks(int $artistID, ?string $self = null): array
+    public static function artistLinks(int $artistID, ?string $self = null, ?string $method = null): array
     {
         $selfLink = $self ? $self : "/artists/$artistID";
+        $selfMethod = $method ? $method : 'GET';
 
         $links = [
-            'self' => ['href' => $selfLink],
+            'self' => ['href' => $selfLink, 'method' => $selfMethod],
             'artist' => ['href' => "/artists/$artistID"],
             'albums' => ['href' => "/artists/$artistID/albums"],
             'delete' => ['href' => "/artists/$artistID", 'method' => 'DELETE']
