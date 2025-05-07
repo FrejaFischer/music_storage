@@ -5,7 +5,7 @@ namespace App;
 use Core\Env;
 abstract class Config
 {
-    const SHOW_ERRORS = true; // true = Development mode, false = Production mode
+    const ENVIRONMENT = 'dev'; // Which environment is active (development or production)
     
     public static string $ROOT_PATH; // The root path of the application. It is a file system path
     public static string $BASE_URL; // The base URL of the application. It is a web URL
@@ -33,7 +33,7 @@ abstract class Config
         $baseUrl = str_replace($documentRoot, '', self::$ROOT_PATH);
         
         // Set BASE_URL depending on if we are in development or production
-        if (self::SHOW_ERRORS) {
+        if (self::ENVIRONMENT==='dev') {
             // As it is an absolute path, it must start with a slash.
             // If it already starts with a slash, ltrim removes it before it gets added again
             self::$BASE_URL = '/' . ltrim($baseUrl, '/') . '/public/'; // equal to: /exam/music_storage/public (Development)
