@@ -66,15 +66,21 @@
      */
     protected function validateID(string|null $id, string $type='ID'): int
     {
+         // Check if the id is not found (null)
+         if (!$id) {
+            ResponseHelper::jsonError("Missing $type");
 
-        // Check if the id is null or not numeric
-        if (!$id || !ctype_digit($id)) {
+            throw new \Exception("Missing $type", 400);
+        }
+
+        // Check if the id is not numeric
+        if (!ctype_digit($id)) {
             ResponseHelper::jsonError("Invalid $type");
 
             throw new \Exception("Invalid $type", 400);
         } 
 
-        // return ID
+        // return valid ID
         return (int)$id;
     }
 
