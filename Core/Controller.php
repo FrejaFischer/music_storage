@@ -59,4 +59,20 @@
         }
     }
 
+    /**
+     * Method for validating an integer ID
+     * 
+     */
+    protected function validateID(string|null $id, string $type='ID'): int
+    {
+
+        // Check if the id is null or not numeric
+        if (!$id || !ctype_digit($id)) {
+            throw new \Exception("Invalid $type", 400);
+        } 
+
+        // return ID
+        return (int)$id;
+    }
+
  }
