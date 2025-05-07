@@ -5,7 +5,6 @@
 */
 
 namespace Core;
-use Core\ResponseHelper;
 class Error 
 {
     /**
@@ -32,27 +31,21 @@ class Error
         // Error information is formatted
         $exceptionClass = get_class($exception);
         $exceptionInfo = <<<EXCEPTION
+        - <br>
+        ---------------------------------------------
         <section id="error">
             <p>Uncaught exception: $exceptionClass</p>
             <p>Message: {$exception->getMessage()}</p>
             <p>Stack trace: {$exception->getTraceAsString()}</p>
             <p>Thrown in: {$exception->getFile()} on line {$exception->getLine()}</p>
         </section>
+        ---------------------------------------------<br>
+        ---------------------------------------------
         EXCEPTION;
 
-        // The information is either logged or returned as json (Development or Production mode)
-        if (\App\Config::SHOW_ERRORS) {
-            ResponseHelper::jsonError($exception->getMessage());
-
-            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
-            ini_set('error_log', $log);
-            error_log("$exceptionInfo<hr>");
-        } else {
-            ResponseHelper::jsonError($exception->getMessage());
-            
-            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
-            ini_set('error_log', $log);
-            error_log("$exceptionInfo<hr>");
-        }
+        // Log the exception
+        $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.html';
+        ini_set('error_log', $log);
+        error_log("$exceptionInfo<hr>");
     }
 }
