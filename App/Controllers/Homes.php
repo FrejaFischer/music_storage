@@ -11,6 +11,7 @@ class Homes extends \Core\Controller
         $albums = Home::getAll();
         
         if (!$albums) {
+            ResponseHelper::jsonError('No albums found');
             throw new \Exception('No albums found', 404);
         }
 

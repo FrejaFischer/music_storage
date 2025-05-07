@@ -13,8 +13,6 @@
 
     public function __construct(array $routeParams)
     {
-        header('Content-Type: application/json');
-
         // Check if route requires API key
         $this->requiresApiKey();
 
@@ -32,6 +30,8 @@
             // (or nothing if there is no arguments)
             call_user_func_array([$this, $method], $args); 
         } else {
+            ResponseHelper::jsonError("System failed. Contact help");
+
             throw new \Exception("Method $method not found in controller " . get_class($this), 500);
         }
     }
@@ -54,8 +54,9 @@
         $providedKey = $_GET['api_key'] ?? null;
 
         if (!in_array($providedKey, Config::$API_KEYS)) {
+            ResponseHelper::jsonError('Forbidden: Invalid or missing API key');
+
             throw new \Exception('Forbidden: Invalid or missing API key', 403);
-            exit;
         }
     }
 
@@ -68,6 +69,8 @@
 
         // Check if the id is null or not numeric
         if (!$id || !ctype_digit($id)) {
+            ResponseHelper::jsonError("Invalid $type");
+
             throw new \Exception("Invalid $type", 400);
         } 
 

@@ -97,12 +97,15 @@ class Router
                     $controllerInstance->$action();
                     return true;
                 } else {
+                    ResponseHelper::jsonError("System failed. Contact help");
                     throw new \Exception("Method $action in controller $controller not found", 500);
                 }
             } else {
+                ResponseHelper::jsonError("System failed. Contact help");
                 throw new \Exception("Controller class $controller not found", 500);
             }
         } else {
+            ResponseHelper::jsonError("URL $url not found");
             throw new \Exception("URL $url not found", 404);
         }
     }

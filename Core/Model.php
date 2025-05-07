@@ -31,11 +31,9 @@ abstract class Model
                 $db = new PDO($dsn, Config::$DB_USER, Config::$DB_PASSWORD);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                if (\App\Config::SHOW_ERRORS) {
-                    throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class(), 500);
-                } else {
-                    throw new \Exception(self::DB_CONN_ERROR, 500);
-                }
+                ResponseHelper::jsonError(self::DB_CONN_ERROR);
+
+                throw new \Exception("Error <strong>{$e->getMessage()}</strong> in model " . get_called_class(), 500);
             }
         }
 

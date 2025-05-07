@@ -20,6 +20,7 @@ class Artists extends \Core\Controller
         }
         
         if (!$artists) {
+            ResponseHelper::jsonError('No artists found');
             throw new \Exception('No artists found', 404);
         }
 
@@ -32,6 +33,7 @@ class Artists extends \Core\Controller
 
         // Check if there is an id in the route path
         if (!$artistID) {
+            ResponseHelper::jsonError('Missing artist ID');
             throw new \Exception('Missing artist ID', 400);
             return;
         }
@@ -44,6 +46,7 @@ class Artists extends \Core\Controller
         $artist = Artist::get($artistID);
 
         if (!$artist) {
+            ResponseHelper::jsonError('No artist found with that ID');
             throw new \Exception('No artist found with that ID', 404);
         }
 

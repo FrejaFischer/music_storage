@@ -20,6 +20,5 @@ class ResponseHelper
             'status' => 'error',
             'message' => $message
         ]);
-        exit;
     }
 }
