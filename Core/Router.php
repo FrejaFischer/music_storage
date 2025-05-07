@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use App\Helpers\ResponseHelper;
+
 /**
  * Router class for controlling the routes
  */

@@ -9,6 +9,7 @@ namespace Core;
 use PDO;
 use PDOException;
 use App\Config;
+use App\Helpers\ResponseHelper;
 
 abstract class Model
  {
