@@ -73,4 +73,31 @@ class Artists extends \Core\Controller
 
     }
 
+    public function deleteAction():void
+    {
+        $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
+
+        // Check if artist has any albums
+        $artistsAlbums = Artist::getAlbums($artistID);
+
+        if ($artistsAlbums) {
+            ResponseHelper::jsonError('Artist still has albums. Artist cannot be deleted');
+            throw new \Exception('Artist still has albums. Artist cannot be deleted', 409);
+            // 409: request cannot be completed due to a conflict with the current state of the resource.
+        }
+
+        $artistIsDeleted = Artist::delete($artistID);
+
+        // If no rows were affected
+        if (!$artistIsDeleted) {
+            ResponseHelper::jsonError('Artist not found. Nothing was deleted.');
+            throw new \Exception('Artist not found. Nothing was deleted.', 404);
+        }
+
+        $links = LinkBuilder::artistLinks($artistID, "/artists/$artistID", 'DELETE'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Artist deleted', 'Artist ID' => $artistID], $links);
+
+    }
+
 }

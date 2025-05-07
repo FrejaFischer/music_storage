@@ -45,4 +45,15 @@ class Artist extends \Core\Model
             'artistID' => $artistID
         ]);
     }
+
+    public static function delete(int $artistID): bool
+    {
+        $sql = <<<'SQL'
+        DELETE FROM Artist WHERE ArtistId = :artistID
+        SQL;
+
+        return self::execute($sql, [
+            'artistID' => $artistID
+        ]);
+    }
 }

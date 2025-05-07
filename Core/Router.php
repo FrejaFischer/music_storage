@@ -29,17 +29,29 @@ class Router
      * @param string $route, the route / endpoint
      * @param array $params, controller + action params (+ method if given)
      */
+    // public function add(string $route, array $params): void
+    // {
+    //     // Convert {id}'s from endpoint / route to regex group
+    //     $route = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
+    //     $route = '#^' . $route . '$#';
+        
+    //     // Check if method is given - else set to GET
+    //     if (!isset($params['method'])) {
+    //         $params['method'] = 'GET';
+    //     }
+    //     $this->routes[$route] = $params;
+    // }
     public function add(string $route, array $params): void
     {
-        // Convert {id}'s from endpoint / route to regex group
         $route = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
         $route = '#^' . $route . '$#';
-        
-        // Check if method is given - else set to GET
-        if (!isset($params['method'])) {
-            $params['method'] = 'GET';
-        }
-        $this->routes[$route] = $params;
+
+        // Default method to GET
+        $method = $params['method'] ?? 'GET';
+        unset($params['method']);
+
+        // Store under route + method
+        $this->routes[$route][$method] = $params;
     }
 
     /**
@@ -48,21 +60,42 @@ class Router
      * @param string $method, the method of the request
      * @return bool, true if there is a match
      */
+    // public function match(string $url, string $method): bool
+    // {
+    //     // Loop through all registered routes
+    //     foreach ($this->routes as $pattern => $params) {
+
+    //         // Check if the current route pattern matches the requested URL
+    //         if (preg_match($pattern, $url, $matches)) {
+
+    //             // Make sure the HTTP method also matches
+    //             if ($params['method'] === $method) {
+
+    //                 // Extract named parameters from the regex match (e.g. ['album_id' => '42']) from regex
+    //                 foreach ($matches as $key => $match) {
+    //                     if (is_string($key)) {
+    //                         $params[$key] = $match; // Add to route params
+    //                     }
+    //                 }
+    //                 $this->params = $params;
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    
+    //     return false;
+    // }
     public function match(string $url, string $method): bool
     {
-        // Loop through all registered routes
-        foreach ($this->routes as $pattern => $params) {
+        foreach ($this->routes as $pattern => $methods) {
 
-            // Check if the current route pattern matches the requested URL
             if (preg_match($pattern, $url, $matches)) {
-
-                // Make sure the HTTP method also matches
-                if ($params['method'] === $method) {
-
-                    // Extract named parameters from the regex match (e.g. ['album_id' => '42']) from regex
+                
+                if (isset($methods[$method])) {
+                    $params = $methods[$method];
                     foreach ($matches as $key => $match) {
                         if (is_string($key)) {
-                            $params[$key] = $match; // Add to route params
+                            $params[$key] = $match;
                         }
                     }
                     $this->params = $params;
@@ -70,9 +103,9 @@ class Router
                 }
             }
         }
-    
         return false;
     }
+    
 
     /**
      * Method for calling the controller corresponding to the URL it receives

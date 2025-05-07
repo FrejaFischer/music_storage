@@ -85,6 +85,11 @@ $router->add('artists/{artist_id}/albums',[
     'controller' => 'Artists',
     'action' => 'album'
 ]);
+$router->add('artists/{artist_id}',[
+    'controller' => 'Artists',
+    'action' => 'delete',
+    'method' => 'DELETE'
+]);
 
 
 //// Fake routes for testing ////
