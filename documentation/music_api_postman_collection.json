@@ -1,0 +1,1839 @@
+{
+	"info": {
+		"_postman_id": "c380ef71-57df-40d4-a1f9-2df6ba5378f7",
+		"name": "PHP - music API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39187895"
+	},
+	"item": [
+		{
+			"name": "fail checks",
+			"item": [
+				{
+					"name": "artists",
+					"item": [
+						{
+							"name": "artists by invalid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/artists/invalid?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"artists",
+										"invalid"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "artists by id - No artist found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/artists/300?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"artists",
+										"300"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "artist by id - Still has albums",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 409\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/artists/10?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"artists",
+										"10"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new artist - name too long",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/artists?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"artists"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new artist - no name in body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/artists?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"artists"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "albums",
+					"item": [
+						{
+							"name": "album by invalid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/albums/invalid?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"invalid"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "album by id - No album found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/albums/400?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"400"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "album by id - Still has tracks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 409\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/albums/10?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"10"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new album - title too long",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name",
+											"type": "text"
+										},
+										{
+											"key": "artist_id",
+											"value": "10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new album - no title in body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "artist_id",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new album - no artist id in body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Missing Artist ID');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "New album",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new album - artist do not exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "New album",
+											"type": "text"
+										},
+										{
+											"key": "artist_id",
+											"value": "400",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new album - artist id not valid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Invalid Artist ID');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "New album",
+											"type": "text"
+										},
+										{
+											"key": "artist_id",
+											"value": "hej",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album by invalid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/albums/invalid?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"invalid"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album - nothing to update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"348"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album - title too long",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"348"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album - artist do not exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "artist_id",
+											"value": "400",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"348"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album - artist id not valid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Validation error\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.includes('Invalid Artist ID');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "artist_id",
+											"value": "hej",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"348"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "no match in route",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"Contains error status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/nothing",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"nothing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "no controller found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"pm.test(\"Contains error status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/test",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "no action found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});",
+									"pm.test(\"Contains error status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/test2?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"test2"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "no match in route with method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"Contains error status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists/30?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists",
+								"30"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "No api key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"pm.test(\"Contains error status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Artists",
+			"item": [
+				{
+					"name": "artists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artists by name search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists?s=ac&api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "s",
+									"value": "ac"
+								},
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artists by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists/10?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists",
+								"10"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artists albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists/10/albums?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists",
+								"10",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/artists/25?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists",
+								"25"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Lorde",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/artists?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "albums by title search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/albums?s=best&api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums"
+							],
+							"query": [
+								{
+									"key": "s",
+									"value": "best"
+								},
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "album by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/albums/10?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"10"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "albums tracks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/albums/10/tracks?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"10",
+								"tracks"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Pure Heroine",
+									"type": "text"
+								},
+								{
+									"key": "artist_id",
+									"value": "276",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/albums?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update album - title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Melodrama",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"348"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update album - artist id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "artist_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"348"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update album - title and artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "artist_id",
+									"value": "276",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Solar Power",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"348"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "album by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/albums/348?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"albums",
+								"348"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "root path",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}",
+					"host": [
+						"{{BASE_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "root path / test for different folder location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Contains success status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"success\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/test/music_storage/public/artists?api_key=abcd1234",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"test",
+						"music_storage",
+						"public",
+						"artists"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "abcd1234"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
