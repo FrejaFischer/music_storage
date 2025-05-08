@@ -64,7 +64,9 @@
 
     /**
      * Method for validating an integer ID
-     * 
+     * @param string|null $id - the id to validate
+     * @param string $type - What type of id it is (e.g. artist id)
+     * @return int - the id if valid
      */
     protected function validateID(string|null $id, string $type='ID'): int
     {

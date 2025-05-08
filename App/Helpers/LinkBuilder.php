@@ -11,8 +11,8 @@ class LinkBuilder
     /**
      * links for /artists/{id} resources
      * @param int $artistID - id from the request
-     * @param string (optional) $self - the current endpoint
-     * @param string (optional) $method - the method of current endpoint
+     * @param string $self (optional) - the current endpoint
+     * @param string $method (optional) - the method of current endpoint
      * @return array - links for HATEOAS response
      */
     public static function artistLinks(int $artistID, ?string $self = null, ?string $method = null): array

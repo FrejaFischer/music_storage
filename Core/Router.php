@@ -10,47 +10,37 @@ use App\Helpers\ResponseHelper;
 class Router
 {
     protected array $routes = []; // the routes
-    protected array $params = []; // the params for the routes
+    protected array $params = []; // the params for the route
 
-    // Is this nessesary?
-    // public function __get(string $property): array|false
-    // {
-    //     switch ($property) {
-    //         case 'routes':
-    //         case 'params':
-    //             return $this->$property;
-    //         default:
-    //             return false;
-    //     }
-    // }
+    // For exposing protected properties for the outside
+    public function __get(string $property): array|false
+    {
+        switch ($property) {
+            case 'routes':
+            case 'params':
+                return $this->$property;
+            default:
+                return false;
+        }
+    }
 
     /**
      * Method for adding a new route
      * @param string $route, the route / endpoint
      * @param array $params, controller + action params (+ method if given)
      */
-    // public function add(string $route, array $params): void
-    // {
-    //     // Convert {id}'s from endpoint / route to regex group
-    //     $route = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
-    //     $route = '#^' . $route . '$#';
-        
-    //     // Check if method is given - else set to GET
-    //     if (!isset($params['method'])) {
-    //         $params['method'] = 'GET';
-    //     }
-    //     $this->routes[$route] = $params;
-    // }
     public function add(string $route, array $params): void
     {
+        // Convert {id} from endpoints to regex group - e.g. #^/artists/(?P<id>[a-zA-Z0-9_-]+)$#
         $route = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[a-zA-Z0-9_-]+)', $route);
         $route = '#^' . $route . '$#';
 
-        // Default method to GET
+        // Check if method is given - else set to GET and store in $method
         $method = $params['method'] ?? 'GET';
+        // remove the method from the params (we now use $method)
         unset($params['method']);
 
-        // Store under route + method
+        // Store the route + $method in routes (the same endpoints gets multiple method keys with the params as values)
         $this->routes[$route][$method] = $params;
     }
 
@@ -60,44 +50,27 @@ class Router
      * @param string $method, the method of the request
      * @return bool, true if there is a match
      */
-    // public function match(string $url, string $method): bool
-    // {
-    //     // Loop through all registered routes
-    //     foreach ($this->routes as $pattern => $params) {
-
-    //         // Check if the current route pattern matches the requested URL
-    //         if (preg_match($pattern, $url, $matches)) {
-
-    //             // Make sure the HTTP method also matches
-    //             if ($params['method'] === $method) {
-
-    //                 // Extract named parameters from the regex match (e.g. ['album_id' => '42']) from regex
-    //                 foreach ($matches as $key => $match) {
-    //                     if (is_string($key)) {
-    //                         $params[$key] = $match; // Add to route params
-    //                     }
-    //                 }
-    //                 $this->params = $params;
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    
-    //     return false;
-    // }
     public function match(string $url, string $method): bool
     {
+        // Loop through all registered routes (which is in a regex pattern) and their methods
         foreach ($this->routes as $pattern => $methods) {
 
+            // Check if the current route pattern matches the requested URL
+            // If successful, preg_match fills $matches with both numbered and named capture groups: [0 => '/artists/123', 'id' => '123']
             if (preg_match($pattern, $url, $matches)) {
-                
+
+                // Check if the match has matching method as the requested URL
                 if (isset($methods[$method])) {
+                    // Get the route's handler params (controller and action)
                     $params = $methods[$method];
+
+                    // Find all named params in matched, like 'id'
                     foreach ($matches as $key => $match) {
                         if (is_string($key)) {
                             $params[$key] = $match;
                         }
                     }
+                    // save the new params for the route in params array
                     $this->params = $params;
                     return true;
                 }
@@ -106,7 +79,6 @@ class Router
         return false;
     }
     
-
     /**
      * Method for calling the controller corresponding to the URL it receives
      * @param string $url, the URL to dispatch
@@ -114,8 +86,6 @@ class Router
      */
     public function dispatch(string $url, string $method): bool|string
     {
-        // $url = $this->removeQueryStringVariables($url);
-
         // Check if there is a match
         if ($this->match($url, $method)) {
             // Set the controller
@@ -144,12 +114,4 @@ class Router
             throw new \Exception("URL $url not found", 404);
         }
     }
-
-    // protected function removeQueryStringVariables(string $url): string
-    // {
-    //     // Notice that PHP replaces the "?" with "&" when it receives the URL via $_SERVER['QUERY_STRING']
-    //     $parts = explode('&', $url, 2);
-    //     $url = strpos($parts[0], '=') ? '' : $parts[0];
-    //     return $url;
-    // }
 }

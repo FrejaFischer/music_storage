@@ -37,7 +37,7 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 $requestUri    = $_SERVER['REQUEST_URI'];
 $queryString   = $_SERVER['QUERY_STRING'] ?? '';
 $clientIp      = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-$timestamp = date("Y-m-d H:i:s A"); // current timestamp
+$timestamp = date("Y-m-d H:i:s A");
 
 $requestInfo = <<<INFO
 $timestamp <br>
@@ -117,5 +117,4 @@ $relativeUrl = preg_replace('#^' . preg_quote($basePath) . '/?#', '', $requestUr
 // Remove query string
 $url = strtok($relativeUrl, '?'); // e.g. artists
 
-// $method = $_SERVER['REQUEST_METHOD'];
 $router->dispatch($url, $requestMethod);
