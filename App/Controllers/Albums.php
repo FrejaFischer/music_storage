@@ -48,4 +48,30 @@ class Albums extends \Core\Controller
 
         ResponseHelper::jsonResponse($album, $links);
     }
+
+    public function trackAction(): void
+    {
+        $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
+
+        // Check if album exist
+        $album = Album::get($albumID);
+
+        if (!$album) {
+            ResponseHelper::jsonError('No album found with that ID');
+            throw new \Exception('No album found with that ID', 404);
+        }
+
+        // Get albums tracks
+        $albumsTracks = Album::getTracks($albumID);
+
+        if (!$albumsTracks) {
+                ResponseHelper::jsonError('No tracks found for that album ID');
+                throw new \Exception('No tracks found for that album ID', 404);
+        }
+
+        $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID/tracks"); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($albumsTracks, $links);
+
+    }
 }

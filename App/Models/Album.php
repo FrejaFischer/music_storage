@@ -37,4 +37,28 @@ class Album extends \Core\Model
             'albumID' => $albumID
         ]);
     }
+
+    public static function getTracks(int $albumID): array
+    {
+        $sql = <<<'SQL'
+        SELECT Track.TrackId, 
+        Track.Name, 
+        Track.AlbumId, 
+        Track.MediaTypeId, 
+        MediaType.Name AS MediaTypeName, 
+        Track.GenreId, 
+        Genre.Name AS GenreName, 
+        Track.Composer, 
+        Track.Milliseconds, 
+        Track.Bytes, 
+        Track.UnitPrice FROM Track 
+        INNER JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId
+        INNER JOIN Genre ON Genre.GenreId = Track.GenreId 
+        WHERE AlbumId = :albumID
+        SQL;
+
+        return self::execute($sql, [
+            'albumID' => $albumID
+        ]);
+    }
 }

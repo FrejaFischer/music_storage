@@ -41,6 +41,7 @@ function testApi(e, endpoint, method = "GET") {
       if (output) output.textContent = error;
     });
 }
+
 // Fetch function with POST (breaks deployed testing)
 // function testApi(e, endpoint, method = "GET", body = null) {
 //   const parentSection = e.closest("section");
@@ -85,7 +86,7 @@ document.querySelector(".artist_delete").addEventListener("click", (e) => testAp
 document.querySelector(".all_albums").addEventListener("click", (e) => testApi(e.currentTarget, "albums?api_key=abcd1234"));
 document.querySelector(".search_albums").addEventListener("click", (e) => testApi(e.currentTarget, "albums?s=best&api_key=abcd1234"));
 document.querySelector(".album").addEventListener("click", (e) => testApi(e.currentTarget, "albums/10?api_key=abcd1234"));
-// document.querySelector(".artist_albums").addEventListener("click", (e) => testApi(e.currentTarget, "artists/24/albums?api_key=abcd1234"));
+document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 // document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
 // document.querySelector(".artist_add").addEventListener("click", (e) =>
 //   testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
