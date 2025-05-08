@@ -100,14 +100,23 @@ class Album extends \Core\Model
 
     public static function add(array $columns): int|array
     {
-        $validationErrors = self::validate($columns);
+        $validationErrors = [];
+
+        $title = trim($columns['title'] ?? '');
+        $titleErrors = self::validateTitle($title);
+        if ($titleErrors) {
+            $validationErrors = array_merge($validationErrors, $titleErrors);
+        }
+
+        $artistId = (int) trim($columns['artist_id'] ?? '');
+        $artistErrors = self::validateArtistId($artistId);
+        if ($artistErrors) {
+            $validationErrors = array_merge($validationErrors, $artistErrors);
+        }
 
         if (!empty($validationErrors)) {
             return $validationErrors;
         }
-
-        $title = trim($columns['title'] ?? '');
-        $artistId = trim($columns['artist_id'] ?? '');
 
         $sql = <<<'SQL'
         INSERT INTO Album(Title, ArtistId) VALUES (:albumTitle, :artistID)
