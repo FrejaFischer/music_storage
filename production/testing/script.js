@@ -1,36 +1,52 @@
 // Development
-// function testApi(e, endpoint, method = "GET") {
-//   fetch(`http://localhost:8888/exam/music_storage/public/${endpoint}`, {
+// function testApi(e, endpoint, method = "GET", body = null) {
+//   const parentSection = e.closest("section");
+//   const output = parentSection.querySelector(".output");
+
+//   const options = {
 //     method: method,
-//   })
+//   };
+
+//   // Add FormData body for POST
+//   if (body && method === "POST") {
+//     const formData = new FormData();
+//     formData.append("name", "New Artist");
+//     options.body = formData;
+//   }
+
+//   fetch(`http://localhost:8888/exam/music_storage/public/${endpoint}`, options)
 //     .then((response) => response.text())
-// .then((data) => {
-//   const parentSection = e.closest("section");
-//   const output = parentSection.querySelector(".output");
-//   if (output) output.textContent = data;
-// })
-// .catch((error) => {
-//   const parentSection = e.closest("section");
-//   const output = parentSection.querySelector(".output");
-//   if (output) output.textContent = error;
-// });
+//     .then((data) => {
+//       if (output) output.textContent = data;
+//     })
+//     .catch((error) => {
+//       if (output) output.textContent = "Error: " + error;
+//     });
 // }
 
 // Production
-function testApi(e, endpoint, method = "GET") {
-  fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, {
+function testApi(e, endpoint, method = "GET", body = null) {
+  const parentSection = e.closest("section");
+  const output = parentSection.querySelector(".output");
+
+  const options = {
     method: method,
-  })
+  };
+
+  // Add FormData body for POST
+  if (body && method === "POST") {
+    const formData = new FormData();
+    formData.append("name", "New Artist");
+    options.body = formData;
+  }
+
+  fetch(`https://digital-media-api.infinityfreeapp.com/api/${endpoint}`, options)
     .then((response) => response.text())
     .then((data) => {
-      const parentSection = e.closest("section");
-      const output = parentSection.querySelector(".output");
       if (output) output.textContent = data;
     })
     .catch((error) => {
-      const parentSection = e.closest("section");
-      const output = parentSection.querySelector(".output");
-      if (output) output.textContent = error;
+      if (output) output.textContent = "Error: " + error;
     });
 }
 
@@ -40,6 +56,11 @@ document.querySelector(".search_artist").addEventListener("click", (e) => testAp
 document.querySelector(".artist").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234"));
 document.querySelector(".artist_albums").addEventListener("click", (e) => testApi(e.currentTarget, "artists/24/albums?api_key=abcd1234"));
 document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
+document.querySelector(".artist_add").addEventListener("click", (e) =>
+  testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
+    name: "New Artist",
+  })
+);
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {
