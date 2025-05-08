@@ -4,6 +4,8 @@ namespace App\Models;
 
 class Artist extends \Core\Model
 {
+    public const MAX_NAME_LENGTH = 10;
+
     public static function getAll(): array
     {
         $sql = <<<'SQL'
@@ -54,6 +56,40 @@ class Artist extends \Core\Model
 
         return self::execute($sql, [
             'artistID' => $artistID
+        ]);
+    }
+
+    private static function validate(array $columns): array
+    {
+        $validationErrors = [];
+
+        $name = trim($columns['name'] ?? '');
+
+        if (empty($name)) {
+            $validationErrors[] = 'Name is mandatory';
+        }
+        if (strlen($name) > self::MAX_NAME_LENGTH) {
+            $validationErrors[] = 'Artists name is too long - Max ' . self::MAX_NAME_LENGTH . ' characters';
+        }
+        return $validationErrors;
+    }
+
+    public static function add(array $columns): int|array
+    {
+        $validationErrors = self::validate($columns);
+
+        if (!empty($validationErrors)) {
+            return $validationErrors;
+        }
+
+        $name = trim($columns['name'] ?? '');
+
+        $sql = <<<'SQL'
+        INSERT INTO Artist(Name) VALUES (:artistName)
+        SQL;
+
+        return self::execute($sql, [
+            'artistName' => $name
         ]);
     }
 }

@@ -100,4 +100,18 @@ class Artists extends \Core\Controller
 
     }
 
+    public function createAction(): void
+    {
+        $result = Artist::add($_POST);
+
+        if (gettype($result) === 'array') {
+            ResponseHelper::jsonError('Artist not added. Validation errors: ' . $result[0]);
+            throw new \Exception('Artist not added. Validation errors: ' . $result[0], 400);
+        }
+
+        $links = LinkBuilder::artistLinks($result, "/artists/$result", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Artist succesfully added', 'Artist ID' => $result], $links);
+    }
+
 }

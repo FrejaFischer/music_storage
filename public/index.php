@@ -90,7 +90,11 @@ $router->add('artists/{artist_id}',[
     'action' => 'delete',
     'method' => 'DELETE'
 ]);
-
+$router->add('artists',[
+    'controller' => 'Artists',
+    'action' => 'create',
+    'method' => 'POST'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[
