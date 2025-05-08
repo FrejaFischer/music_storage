@@ -32,4 +32,20 @@ class Albums extends \Core\Controller
 
         ResponseHelper::jsonResponse($albums, $links);
     }
+
+    public function findAction(): void
+    {
+        $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
+
+        $album = Album::get($albumID);
+
+        if (!$album) {
+            ResponseHelper::jsonError('No album found with that ID');
+            throw new \Exception('No album found with that ID', 404);
+        }
+
+        $links = LinkBuilder::albumLinks($albumID); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($album, $links);
+    }
 }

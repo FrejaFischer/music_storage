@@ -101,6 +101,10 @@ $router->add('albums',[
     'controller' => 'Albums',
     'action' => 'get'
 ]);
+$router->add('albums/{album_id}',[
+    'controller' => 'Albums',
+    'action' => 'find'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[

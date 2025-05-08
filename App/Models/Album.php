@@ -24,4 +24,17 @@ class Album extends \Core\Model
             'search' => "%$searchText%"
         ]);
     }
+
+    public static function get(int $albumID): array
+    {
+        $sql = <<<'SQL'
+            SELECT Album.AlbumId, Album.Title AS AlbumTitle, Album.ArtistId, Artist.name AS ArtistName FROM Album 
+            INNER JOIN Artist ON Album.ArtistId = Artist.ArtistId 
+            WHERE AlbumId = :albumID
+        SQL;
+
+        return self::execute($sql, [
+            'albumID' => $albumID
+        ]);
+    }
 }
