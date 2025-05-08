@@ -100,4 +100,20 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse(['Message' => 'Album deleted', 'Album ID' => $albumID], $links);
     }
 
+    public function createAction(): void
+    {
+        // Validate the artist ID from POST
+        $this->validateID($_POST['artist_id'] ?? null, 'Artist ID');
+
+        $result = Album::add($_POST);
+
+        if (gettype($result) === 'array') {
+            ResponseHelper::jsonError('Album not added. Validation errors: ' . $result[0]);
+            throw new \Exception('Album not added. Validation errors: ' . $result[0], 400);
+        }
+
+        $links = LinkBuilder::albumLinks($result, "/albums/$result", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Album succesfully added', 'Album ID' => $result], $links);
+    }
 }

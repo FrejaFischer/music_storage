@@ -114,6 +114,11 @@ $router->add('albums/{album_id}',[
     'action' => 'delete',
     'method' => 'DELETE'
 ]);
+$router->add('albums',[
+    'controller' => 'Albums',
+    'action' => 'create',
+    'method' => 'POST'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[

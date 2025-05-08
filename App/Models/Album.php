@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Artist;
+
 class Album extends \Core\Model
 {
+    public const MAX_TITLE_LENGTH = 160;
+
     public static function getAll(): array
     {
         $sql = <<<'SQL'
@@ -70,6 +74,52 @@ class Album extends \Core\Model
 
         return self::execute($sql, [
             'albumID' => $albumID
+        ]);
+    }
+
+    private static function validate(array $columns): array
+    {
+        $validationErrors = [];
+
+        $title = trim($columns['title'] ?? '');
+        $artistId = trim($columns['artist_id'] ?? '');
+
+        // Validate title
+        if (empty($title)) {
+            $validationErrors[] = 'Title is mandatory';
+        }
+        if (strlen($title) > self::MAX_TITLE_LENGTH) {
+            $validationErrors[] = 'Albums title is too long - Max ' . self::MAX_TITLE_LENGTH . ' characters';
+        }
+
+        // Check if artist exist
+        $artistExist = Artist::get($artistId);
+        if (!$artistExist) {
+            $validationErrors[] = 'No artist with that id exists';
+        }
+
+
+        return $validationErrors;
+    }
+
+    public static function add(array $columns): int|array
+    {
+        $validationErrors = self::validate($columns);
+
+        if (!empty($validationErrors)) {
+            return $validationErrors;
+        }
+
+        $title = trim($columns['title'] ?? '');
+        $artistId = trim($columns['artist_id'] ?? '');
+
+        $sql = <<<'SQL'
+        INSERT INTO Album(Title, ArtistId) VALUES (:albumTitle, :artistID)
+        SQL;
+
+        return self::execute($sql, [
+            'albumTitle' => $title,
+            'artistID' => $artistId
         ]);
     }
 }

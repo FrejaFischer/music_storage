@@ -1,5 +1,5 @@
 // Development
-// function testApi(e, endpoint, method = "GET", body = null) {
+// function testApi(e, endpoint, method = "GET", body = null, from = null) {
 //   const parentSection = e.closest("section");
 //   const output = parentSection.querySelector(".output");
 
@@ -10,7 +10,11 @@
 //   // Add FormData body for POST
 //   if (body && method === "POST") {
 //     const formData = new FormData();
-//     formData.append("name", "New Artist");
+//     for (const key in body) {
+//       if (body.hasOwnProperty(key)) {
+//         formData.append(key, body[key]);
+//       }
+//     }
 //     options.body = formData;
 //   }
 
@@ -52,11 +56,15 @@ function testApi(e, endpoint, method = "GET") {
 //   };
 
 //   // Add FormData body for POST
-//   if (body && method === "POST") {
-//     const formData = new FormData();
-//     formData.append("name", "New Artist");
-//     options.body = formData;
+// if (body && method === "POST") {
+//   const formData = new FormData();
+//   for (const key in body) {
+//     if (body.hasOwnProperty(key)) {
+//       formData.append(key, body[key]);
+//     }
 //   }
+//   options.body = formData;
+// }
 
 //   fetch(`https://digital-media-api.infinityfreeapp.com/api/${endpoint}`, options)
 //     .then((response) => response.text())
@@ -88,9 +96,10 @@ document.querySelector(".search_albums").addEventListener("click", (e) => testAp
 document.querySelector(".album").addEventListener("click", (e) => testApi(e.currentTarget, "albums/10?api_key=abcd1234"));
 document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
-// document.querySelector(".artist_add").addEventListener("click", (e) =>
-//   testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
-//     name: "New Artist",
+// document.querySelector(".album_add").addEventListener("click", (e) =>
+//   testApi(e.currentTarget, "albums?api_key=abcd1234", "POST", {
+//     title: "New album",
+//     artist_id: 2,
 //   })
 // );
 
