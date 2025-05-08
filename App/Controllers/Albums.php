@@ -13,19 +13,17 @@ class Albums extends \Core\Controller
      */
     public function getAction(): void
     {
-        //$search = $_GET['s'] ?? null; // Search for artists by name
+        $search = $_GET['s'] ?? null; // Search for albums by title
 
-        // if($search) {
-        //     $artists = Artist::search($search);
-        //     $links = LinkBuilder::artistCollectionLinks('/artists?s={search}'); // Get HATEOAS links
-        // } else {
-        //     $artists = Artist::getAll();
-        //     $links = LinkBuilder::artistCollectionLinks(); // Get HATEOAS links
-        // }
-        // All albums and their artist
-        $albums = Album::getAll();
-        
-        $links = LinkBuilder::albumCollectionLinks(); // Get HATEOAS links
+        if($search) {
+            // Search for albums by title
+            $albums = Album::search($search);
+            $links = LinkBuilder::albumCollectionLinks('/albums?s={search}'); // Get HATEOAS links
+        } else {
+            // All albums and their artist
+            $albums = Album::getAll();
+            $links = LinkBuilder::albumCollectionLinks(); // Get HATEOAS links
+        }
         
         if (!$albums) {
             ResponseHelper::jsonError('No albums found');

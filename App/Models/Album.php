@@ -13,4 +13,15 @@ class Album extends \Core\Model
 
         return self::execute($sql);
     }
+
+    public static function search(string $searchText): array
+    {
+        $sql = <<<'SQL'
+            SELECT * FROM Album WHERE Title LIKE :search
+        SQL;
+
+        return self::execute($sql, [
+            'search' => "%$searchText%"
+        ]);
+    }
 }
