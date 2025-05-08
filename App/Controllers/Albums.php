@@ -72,6 +72,32 @@ class Albums extends \Core\Controller
         $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID/tracks"); // Get HATEOAS links
 
         ResponseHelper::jsonResponse($albumsTracks, $links);
-
     }
+
+    public function deleteAction():void
+    {
+        $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
+
+        // Check if album has any tracks
+        $albumsTracks = Album::getTracks($albumID);
+
+        if ($albumsTracks) {
+            ResponseHelper::jsonError('Album still has tracks. Album cannot be deleted');
+            throw new \Exception('Album still has tracks. Album cannot be deleted', 409);
+            // 409: request cannot be completed due to a conflict with the current state of the resource.
+        }
+
+        $albumIsDeleted = Album::delete($albumID);
+
+        // If no rows were affected
+        if (!$albumIsDeleted) {
+            ResponseHelper::jsonError('Album not found. Nothing was deleted.');
+            throw new \Exception('Album not found. Nothing was deleted.', 404);
+        }
+
+        $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID", 'DELETE'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Album deleted', 'Album ID' => $albumID], $links);
+    }
+
 }

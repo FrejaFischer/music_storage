@@ -48,15 +48,17 @@ class LinkBuilder
     /**
      * links for /albums/{id} resources
      * @param int $albumID - id from the request
-     * @param string (optional) $self - the current endpoint
+     * @param string $self (optional) - the current endpoint
+     * @param string $method (optional) - the current endpoints method
      * @return array - links for HATEOAS response
      */
-    public static function albumLinks(int $albumID, ?string $self = null): array
+    public static function albumLinks(int $albumID, ?string $self = null, ?string $method = null): array
     {
         $selfLink = $self ? $self : "/albums/$albumID";
+        $selfMethod = $method ? $method : 'GET';
 
         $links = [
-            'self' => ['href' => $selfLink],
+            'self' => ['href' => $selfLink, 'method' => $selfMethod],
             'album' => ['href' => "/albums/$albumID"],
             'tracks' => ['href' => "/albums/$albumID/tracks"],
             'update' => ['href' => "/albums/$albumID", 'method' => 'POST'],
@@ -87,12 +89,13 @@ class LinkBuilder
      * @param string (optional) $self - the current endpoint
      * @return array - links for HATEOAS response
      */
-    public static function trackLinks(int $trackID, ?string $self = null): array
+    public static function trackLinks(int $trackID, ?string $self = null, ?string $method = null): array
     {
         $selfLink = $self ? $self : "/tracks/$trackID";
+        $selfMethod = $method ? $method : 'GET';
 
         $links = [
-            'self' => ['href' => $selfLink],
+            'self' => ['href' => $selfLink, 'method' => $selfMethod],
             'track' => ['href' => "/tracks/$trackID"],
             'update' => ['href' => "/tracks/$trackID", 'method' => 'POST'],
             'delete' => ['href' => "/tracks/$trackID", 'method' => 'DELETE']
@@ -149,12 +152,13 @@ class LinkBuilder
      * @param int $trackID - track id from the request
      * @return array - links for HATEOAS response
      */
-    public static function playlistLinks(int $playlistID, int $trackID, ?string $self = null): array
+    public static function playlistLinks(int $playlistID, int $trackID, ?string $self = null, ?string $method = null): array
     {
         $selfLink = $self ? $self : "/playlists/$playlistID";
+        $selfMethod = $method ? $method : 'GET';
 
         $links = [
-            'self' => ['href' => $selfLink],
+            'self' => ['href' => $selfLink, 'method' => $selfMethod],
             'playlist' => ['href' => "/playlists/$playlistID"],
             'add track' => ['href' => "/playlists/$playlistID/tracks/$trackID", 'method' => 'POST'],
             'remove track' => ['href' => "/playlists/$playlistID/tracks/$trackID", 'method' => 'DELETE'],

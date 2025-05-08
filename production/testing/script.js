@@ -87,7 +87,7 @@ document.querySelector(".all_albums").addEventListener("click", (e) => testApi(e
 document.querySelector(".search_albums").addEventListener("click", (e) => testApi(e.currentTarget, "albums?s=best&api_key=abcd1234"));
 document.querySelector(".album").addEventListener("click", (e) => testApi(e.currentTarget, "albums/10?api_key=abcd1234"));
 document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
-// document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
+document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
 // document.querySelector(".artist_add").addEventListener("click", (e) =>
 //   testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
 //     name: "New Artist",

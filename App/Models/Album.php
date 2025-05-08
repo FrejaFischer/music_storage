@@ -61,4 +61,15 @@ class Album extends \Core\Model
             'albumID' => $albumID
         ]);
     }
+
+    public static function delete(int $albumID): bool
+    {
+        $sql = <<<'SQL'
+        DELETE FROM Album WHERE AlbumId = :albumID
+        SQL;
+
+        return self::execute($sql, [
+            'albumID' => $albumID
+        ]);
+    }
 }
