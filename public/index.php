@@ -96,6 +96,12 @@ $router->add('artists',[
     'method' => 'POST'
 ]);
 
+//// Albums ////
+$router->add('albums',[
+    'controller' => 'Albums',
+    'action' => 'get'
+]);
+
 //// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',
