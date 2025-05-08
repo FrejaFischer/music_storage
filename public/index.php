@@ -119,6 +119,11 @@ $router->add('albums',[
     'action' => 'create',
     'method' => 'POST'
 ]);
+$router->add('albums/{album_id}',[
+    'controller' => 'Albums',
+    'action' => 'update',
+    'method' => 'POST'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[

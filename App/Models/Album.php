@@ -77,29 +77,25 @@ class Album extends \Core\Model
         ]);
     }
 
-    private static function validate(array $columns): array
+    private static function validateTitle(string $title): array
     {
-        $validationErrors = [];
-
-        $title = trim($columns['title'] ?? '');
-        $artistId = trim($columns['artist_id'] ?? '');
-
-        // Validate title
+        $errors = [];
         if (empty($title)) {
-            $validationErrors[] = 'Title is mandatory';
+            $errors[] = 'Title is mandatory';
         }
         if (strlen($title) > self::MAX_TITLE_LENGTH) {
-            $validationErrors[] = 'Albums title is too long - Max ' . self::MAX_TITLE_LENGTH . ' characters';
+            $errors[] = 'Album title is too long - Max ' . self::MAX_TITLE_LENGTH . ' characters';
         }
+        return $errors;
+    }
 
-        // Check if artist exist
-        $artistExist = Artist::get($artistId);
-        if (!$artistExist) {
-            $validationErrors[] = 'No artist with that id exists';
+    private static function validateArtistId(int $artistId): array
+    {
+        $errors = [];
+        if (!Artist::get($artistId)) {
+            $errors[] = 'No artist with that ID exists';
         }
-
-
-        return $validationErrors;
+        return $errors;
     }
 
     public static function add(array $columns): int|array
@@ -121,5 +117,47 @@ class Album extends \Core\Model
             'albumTitle' => $title,
             'artistID' => $artistId
         ]);
+    }
+
+    public static function update(array $columns, int $albumID): int|array
+    {
+        $set = [];
+        $params = ['albumID' => $albumID];
+        $validationErrors = [];
+    
+        // Title
+        if (isset($columns['title'])) {
+            $title = trim($columns['title']);
+            $titleErrors = self::validateTitle($title);
+            if ($titleErrors) {
+                $validationErrors = array_merge($validationErrors, $titleErrors);
+            } else {
+                $set[] = "Title = :albumTitle";
+                $params['albumTitle'] = $title;
+            }
+        }
+    
+        // Artist ID
+        if (isset($columns['artist_id'])) {
+            $artistId = (int) trim($columns['artist_id']);
+            $artistErrors = self::validateArtistId($artistId);
+            if ($artistErrors) {
+                $validationErrors = array_merge($validationErrors, $artistErrors);
+            } else {
+                $set[] = "ArtistId = :artistID";
+                $params['artistID'] = $artistId;
+            }
+        }
+    
+        if (!empty($validationErrors)) {
+            return $validationErrors;
+        }
+    
+        if (empty($set)) {
+            return ['Found nothing to update'];
+        }
+    
+        $sql = "UPDATE Album SET " . implode(', ', $set) . " WHERE AlbumId = :albumID";
+        return self::execute($sql, $params);
     }
 }

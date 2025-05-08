@@ -102,6 +102,12 @@ document.querySelector(".album_delete").addEventListener("click", (e) => testApi
 //     artist_id: 2,
 //   })
 // );
+// document.querySelector(".album_update").addEventListener("click", (e) =>
+//   testApi(e.currentTarget, "albums/1?api_key=abcd1234", "POST", {
+//     title: "New title",
+//     artist_id: 2,
+//   })
+// );
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {

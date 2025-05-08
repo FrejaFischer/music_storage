@@ -116,4 +116,25 @@ class Albums extends \Core\Controller
 
         ResponseHelper::jsonResponse(['Message' => 'Album succesfully added', 'Album ID' => $result], $links);
     }
+
+    public function updateAction(): void
+    {
+        $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
+
+        // Validate the artist ID from POST (if present)
+        if (isset($_POST['artist_id'])) {
+            $this->validateID($_POST['artist_id'] ?? null, 'Artist ID');
+        }
+
+        $result = Album::update($_POST, $albumID);
+
+        if (gettype($result) === 'array') {
+            ResponseHelper::jsonError('Album not updated. Validation errors: ' . $result[0]);
+            throw new \Exception('Album not updated. Validation errors: ' . $result[0], 400);
+        }
+
+        $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Album succesfully updated', 'Album ID' => $albumID], $links);
+    }
 }
