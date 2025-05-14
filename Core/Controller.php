@@ -8,6 +8,7 @@
 
  use App\Config;
  use App\Helpers\ResponseHelper;
+ use App\Helpers\ValidationHelper;
 
  abstract class Controller
  {
@@ -77,8 +78,8 @@
             throw new \Exception("Missing $type", 400);
         }
         
-        // Check if the id is not an int or numeric
-        if (!filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
+        // Check if the id is valid
+        if (!ValidationHelper::isValidId($id)) {
             ResponseHelper::jsonError("Invalid $type");
 
             throw new \Exception("Invalid $type", 400);
