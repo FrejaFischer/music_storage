@@ -20,6 +20,7 @@ class Tracks extends \Core\Controller
             $links = LinkBuilder::trackCollectionLinks('/tracks?s={search}'); // Get HATEOAS links
         } else {
             ResponseHelper::jsonError('No search text found. Please search for track name in this format: /tracks?s=<search_text>');
+            throw new \Exception('No search text found. Please search for track name in this format: /tracks?s=<search_text>', 404);
         }
         
         if (!$tracks) {
