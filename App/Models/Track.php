@@ -28,4 +28,29 @@ class Track extends \Core\Model
             'search' => "%$searchText%"
         ]);
     }
+
+    public static function get(int $trackID): array
+    {
+        $sql = <<<'SQL'
+            SELECT Track.TrackId, 
+            Track.Name, 
+            Track.AlbumId, 
+            Track.MediaTypeId, 
+            MediaType.Name AS MediaTypeName, 
+            Track.GenreId, 
+            Genre.Name AS GenreName, 
+            Track.Composer, 
+            Track.Milliseconds, 
+            Track.Bytes, 
+            Track.UnitPrice 
+            FROM Track 
+            INNER JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId
+            INNER JOIN Genre ON Genre.GenreId = Track.GenreId
+            WHERE Track.TrackId = :trackID
+        SQL;
+
+        return self::execute($sql, [
+            'trackID' => $trackID
+        ]);
+    }
 }

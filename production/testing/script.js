@@ -1,34 +1,6 @@
-// Development
-// function testApi(e, endpoint, method = "GET", body = null, from = null) {
-//   const parentSection = e.closest("section");
-//   const output = parentSection.querySelector(".output");
+//const fetchURL = "http://digital-media-api.infinityfreeapp.com/api/"; // Production
+const fetchURL = "http://localhost:8888/exam/music_storage/public/"; // Development
 
-//   const options = {
-//     method: method,
-//   };
-
-//   // Add FormData body for POST
-//   if (body && method === "POST") {
-//     const formData = new FormData();
-//     for (const key in body) {
-//       if (body.hasOwnProperty(key)) {
-//         formData.append(key, body[key]);
-//       }
-//     }
-//     options.body = formData;
-//   }
-
-//   fetch(`http://localhost:8888/exam/music_storage/public/${endpoint}`, options)
-//     .then((response) => response.text())
-//     .then((data) => {
-//       if (output) output.textContent = data;
-//     })
-//     .catch((error) => {
-//       if (output) output.textContent = "Error: " + error;
-//     });
-// }
-
-// Production
 // Fetch function
 function testApi(e, endpoint, method = "GET", body = null) {
   const parentSection = e.closest("section");
@@ -49,7 +21,9 @@ function testApi(e, endpoint, method = "GET", body = null) {
     options.body = formData;
   }
 
-  fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, options)
+  const fetchURLWithEndpoint = fetchURL + endpoint;
+
+  fetch(fetchURLWithEndpoint, options)
     .then((response) => response.text())
     .then((data) => {
       if (output) output.textContent = data;
@@ -58,24 +32,6 @@ function testApi(e, endpoint, method = "GET", body = null) {
       if (output) output.textContent = "Error: " + error;
     });
 }
-
-// Simple solution (without handling POST)
-// function testApi(e, endpoint, method = "GET") {
-//   fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, {
-//     method: method,
-//   })
-//     .then((response) => response.text())
-//     .then((data) => {
-//       const parentSection = e.closest("section");
-//       const output = parentSection.querySelector(".output");
-//       if (output) output.textContent = data;
-//     })
-//     .catch((error) => {
-//       const parentSection = e.closest("section");
-//       const output = parentSection.querySelector(".output");
-//       if (output) output.textContent = error;
-//     });
-// }
 
 // Endpoints
 // Artists
@@ -111,7 +67,7 @@ document.querySelector(".album_update").addEventListener("click", (e) =>
 
 // Tracks
 document.querySelector(".search_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
-// document.querySelector(".album").addEventListener("click", (e) => testApi(e.currentTarget, "albums/10?api_key=abcd1234"));
+document.querySelector(".track").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/10?api_key=abcd1234"));
 // document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 // document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
 // document.querySelector(".album_add").addEventListener("click", (e) =>

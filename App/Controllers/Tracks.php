@@ -30,4 +30,23 @@ class Tracks extends \Core\Controller
 
         ResponseHelper::jsonResponse($tracks, $links);
     }
+
+    /**
+     * Finding track by id
+     */
+    public function findAction(): void
+    {
+        $trackID = $this->validateID($this->routeParams['track_id'] ?? null, 'Track ID');
+
+        $track = Track::get($trackID);
+
+        if (!$track) {
+            ResponseHelper::jsonError('No track found with that ID');
+            throw new \Exception('No track found with that ID', 404);
+        }
+
+        $links = LinkBuilder::trackLinks($trackID); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($track, $links);
+    }
 }

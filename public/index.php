@@ -130,6 +130,10 @@ $router->add('tracks',[
     'controller' => 'Tracks',
     'action' => 'get'
 ]);
+$router->add('tracks/{track_id}',[
+    'controller' => 'Tracks',
+    'action' => 'find'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[
