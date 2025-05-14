@@ -1,4 +1,4 @@
-//const fetchURL = "http://digital-media-api.infinityfreeapp.com/api/"; // Production
+// const fetchURL = "http://digital-media-api.infinityfreeapp.com/api/"; // Production
 const fetchURL = "http://localhost:8888/exam/music_storage/public/"; // Development
 
 // Fetch function
@@ -66,7 +66,8 @@ document.querySelector(".album_update").addEventListener("click", (e) =>
 );
 
 // Tracks
-document.querySelector(".search_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
+document.querySelector(".search_tracks_name").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
+document.querySelector(".search_tracks_composer").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?composer=philip&api_key=abcd1234"));
 document.querySelector(".track").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/10?api_key=abcd1234"));
 // document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 // document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));

@@ -9,18 +9,22 @@ use App\Models\Track;
 class Tracks extends \Core\Controller
 {
     /**
-    * Getting all tracks with name search
+    * Getting all tracks with name search or composer search
     */
     public function getAction(): void 
     {
         $search = $_GET['s'] ?? null; // Search for tracks by name
+        $composer = $_GET['composer'] ?? null; // Search for tracks by composer
 
         if($search) {
-            $tracks = Track::search($search);
+            $tracks = Track::search($search, "Name");
             $links = LinkBuilder::trackCollectionLinks('/tracks?s={search}'); // Get HATEOAS links
+        } else if($composer) {
+            $tracks = Track::search($composer, "Composer");
+            $links = LinkBuilder::trackCollectionLinks('/tracks?composer={search}');
         } else {
-            ResponseHelper::jsonError('No search text found. Please search for track name in this format: /tracks?s=<search_text>');
-            throw new \Exception('No search text found. Please search for track name in this format: /tracks?s=<search_text>', 404);
+            ResponseHelper::jsonError('No search text found. Please search for track name or composer');
+            throw new \Exception('No search text found. Please search for track name or composer', 404);
         }
         
         if (!$tracks) {

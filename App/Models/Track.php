@@ -2,11 +2,24 @@
 
 namespace App\Models;
 
+use App\Helpers\ResponseHelper;
+
 class Track extends \Core\Model
 {
-    public static function search(string $searchText): array
+    /**
+     * Method for searching for tracks by their name or composer
+     */
+    public static function search(string $searchText, string $searchColumn): array
     {
-        $sql = <<<'SQL'
+        // Check if the chosen searchColumn is allowed to search in
+        $allowedColumns = ['Name', 'Composer'];
+
+        if (!in_array($searchColumn, $allowedColumns, true)) {
+            ResponseHelper::jsonError('System Error - please contact us');
+            throw new \Exception("Invalid search column: $searchColumn", 500);
+        }
+
+        $sql = <<<SQL
             SELECT Track.TrackId, 
             Track.Name, 
             Track.AlbumId, 
@@ -21,7 +34,7 @@ class Track extends \Core\Model
             FROM Track 
             INNER JOIN MediaType ON MediaType.MediaTypeId = Track.MediaTypeId
             INNER JOIN Genre ON Genre.GenreId = Track.GenreId
-            WHERE Track.Name LIKE :search
+            WHERE Track.$searchColumn LIKE :search
         SQL;
 
         return self::execute($sql, [
@@ -29,6 +42,9 @@ class Track extends \Core\Model
         ]);
     }
 
+    /**
+     * Method for getting specific track by its ID
+     */
     public static function get(int $trackID): array
     {
         $sql = <<<'SQL'
