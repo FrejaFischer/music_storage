@@ -125,6 +125,12 @@ $router->add('albums/{album_id}',[
     'method' => 'POST'
 ]);
 
+//// Tracks ////
+$router->add('tracks',[
+    'controller' => 'Tracks',
+    'action' => 'get'
+]);
+
 //// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',

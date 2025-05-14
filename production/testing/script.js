@@ -1,36 +1,5 @@
 // Development
-function testApi(e, endpoint, method = "GET", body = null, from = null) {
-  const parentSection = e.closest("section");
-  const output = parentSection.querySelector(".output");
-
-  const options = {
-    method: method,
-  };
-
-  // Add FormData body for POST
-  if (body && method === "POST") {
-    const formData = new FormData();
-    for (const key in body) {
-      if (body.hasOwnProperty(key)) {
-        formData.append(key, body[key]);
-      }
-    }
-    options.body = formData;
-  }
-
-  fetch(`http://localhost:8888/exam/music_storage/public/${endpoint}`, options)
-    .then((response) => response.text())
-    .then((data) => {
-      if (output) output.textContent = data;
-    })
-    .catch((error) => {
-      if (output) output.textContent = "Error: " + error;
-    });
-}
-
-// Production
-// Fetch function with POST
-// function testApi(e, endpoint, method = "GET", body = null) {
+// function testApi(e, endpoint, method = "GET", body = null, from = null) {
 //   const parentSection = e.closest("section");
 //   const output = parentSection.querySelector(".output");
 
@@ -49,7 +18,7 @@ function testApi(e, endpoint, method = "GET", body = null, from = null) {
 //     options.body = formData;
 //   }
 
-//   fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, options)
+//   fetch(`http://localhost:8888/exam/music_storage/public/${endpoint}`, options)
 //     .then((response) => response.text())
 //     .then((data) => {
 //       if (output) output.textContent = data;
@@ -59,7 +28,38 @@ function testApi(e, endpoint, method = "GET", body = null, from = null) {
 //     });
 // }
 
-// Simple solution
+// Production
+// Fetch function
+function testApi(e, endpoint, method = "GET", body = null) {
+  const parentSection = e.closest("section");
+  const output = parentSection.querySelector(".output");
+
+  const options = {
+    method: method,
+  };
+
+  // Add FormData body for POST
+  if (body && method === "POST") {
+    const formData = new FormData();
+    for (const key in body) {
+      if (body.hasOwnProperty(key)) {
+        formData.append(key, body[key]);
+      }
+    }
+    options.body = formData;
+  }
+
+  fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, options)
+    .then((response) => response.text())
+    .then((data) => {
+      if (output) output.textContent = data;
+    })
+    .catch((error) => {
+      if (output) output.textContent = "Error: " + error;
+    });
+}
+
+// Simple solution (without handling POST)
 // function testApi(e, endpoint, method = "GET") {
 //   fetch(`http://digital-media-api.infinityfreeapp.com/api/${endpoint}`, {
 //     method: method,
@@ -79,7 +79,6 @@ function testApi(e, endpoint, method = "GET", body = null, from = null) {
 
 // Endpoints
 // Artists
-
 document.querySelector(".all_artists").addEventListener("click", (e) => testApi(e.currentTarget, "artists?api_key=abcd1234"));
 document.querySelector(".search_artist").addEventListener("click", (e) => testApi(e.currentTarget, "artists?s=hot&api_key=abcd1234"));
 document.querySelector(".artist").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234"));
@@ -109,6 +108,24 @@ document.querySelector(".album_update").addEventListener("click", (e) =>
     artist_id: 2,
   })
 );
+
+// Tracks
+document.querySelector(".search_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
+// document.querySelector(".album").addEventListener("click", (e) => testApi(e.currentTarget, "albums/10?api_key=abcd1234"));
+// document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
+// document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
+// document.querySelector(".album_add").addEventListener("click", (e) =>
+//   testApi(e.currentTarget, "albums?api_key=abcd1234", "POST", {
+//     title: "New album",
+//     artist_id: 2,
+//   })
+// );
+// document.querySelector(".album_update").addEventListener("click", (e) =>
+//   testApi(e.currentTarget, "albums/10?api_key=abcd1234", "POST", {
+//     title: "New title",
+//     artist_id: 2,
+//   })
+// );
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {
