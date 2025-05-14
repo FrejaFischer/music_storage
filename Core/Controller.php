@@ -76,13 +76,13 @@
 
             throw new \Exception("Missing $type", 400);
         }
-
-        // Check if the id is not numeric
-        if (!ctype_digit($id)) {
+        
+        // Check if the id is not an int or numeric
+        if (!filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
             ResponseHelper::jsonError("Invalid $type");
 
             throw new \Exception("Invalid $type", 400);
-        } 
+        }
 
         // return valid ID
         return (int)$id;
