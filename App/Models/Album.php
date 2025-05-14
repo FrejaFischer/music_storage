@@ -21,7 +21,13 @@ class Album extends \Core\Model
     public static function search(string $searchText): array
     {
         $sql = <<<'SQL'
-            SELECT * FROM Album WHERE Title LIKE :search
+            SELECT Album.AlbumId, 
+            Album.Title AS AlbumTitle, 
+            Album.ArtistId, 
+            Artist.Name AS ArtistName 
+            FROM Album 
+            INNER JOIN Artist ON Album.ArtistId = Artist.ArtistId
+            WHERE Title LIKE :search
         SQL;
 
         return self::execute($sql, [
