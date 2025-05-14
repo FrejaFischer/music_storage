@@ -53,4 +53,25 @@ class Tracks extends \Core\Controller
 
         ResponseHelper::jsonResponse($track, $links);
     }
+
+    public function createAction(): void
+    {
+        $result = Track::add($_POST);
+
+        if (gettype($result) === 'array') {
+            $validationMessage = '';
+
+            // loop over all validation errors
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError("Track not added. Validation errors: $validationMessage");
+            throw new \Exception("Track not added. Validation errors: $validationMessage", 400);
+        }
+
+        $links = LinkBuilder::trackLinks($result, "/tracks/$result", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Track succesfully added', 'Track ID' => $result], $links);
+    }
 }

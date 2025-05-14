@@ -3,9 +3,16 @@
 namespace App\Models;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\ValidationHelper;
+use App\Models\Album;
 
 class Track extends \Core\Model
 {
+    public const MAX_NAME_LENGTH = 200; 
+    public const MAX_COMPOSER_LENGTH = 220; 
+    public const MAX_PRICE_DIGITS = 10; 
+    public const MAX_PRICE_DECIMALS = 2; 
+
     /**
      * Method for searching for tracks by their name or composer
      */
@@ -68,5 +75,171 @@ class Track extends \Core\Model
         return self::execute($sql, [
             'trackID' => $trackID
         ]);
+    }
+
+    /**
+     * Validate function for validating track information. 
+     * Validated both on creation of new tracks and updates on track
+     * @param array $data the track data
+     * @param bool $isInsert if the validation is made on an insert or update of a track
+     * @return array of errors, empty if no errors
+     */
+    private static function validateTrack(array $data, bool $isInsert = false): array
+    {
+        $errors = [];
+
+        // Name (if it's an insert or if it's an update and the name is present)
+        if ($isInsert || array_key_exists('name', $data)) {
+            $name = $data['name'] ?? null;
+
+            if (empty($name) || !is_string($name)) {
+                $errors[] = 'Name is required and must be a string.';
+            } else if (strlen($name) > self::MAX_NAME_LENGTH) {
+                $errors[] = 'Track name is too long - Max ' . self::MAX_NAME_LENGTH . ' characters';
+            }
+        }
+
+        // AlbumId (if present, and not null (empty string))
+        if (array_key_exists('album_id', $data) && $data['album_id'] !== '') {
+            // Check if the id is valid
+            if (!ValidationHelper::isValidId($data['album_id'])) {
+                $errors[] = 'Invalid Album ID - must be numeric';
+            } else if (!Album::get($data['album_id'])) {
+                // Check if there exist an album with the ID
+                $errors[] = 'No album with that ID exists';
+            }
+        }
+
+        // MediaTypeId (if it's an insert or if it's an update and the media type is present)
+        if ($isInsert || array_key_exists('media_type_id', $data)) {
+            $mediaTypeId = $data['media_type_id'] ?? null;
+
+            // Check if there is an id
+            if (empty($mediaTypeId)) {
+                $errors[] = 'Media Type Id is required';
+            } else if (!ValidationHelper::isValidId($mediaTypeId)) {
+                // Check if the id is valid
+                $errors[] = 'Invalid Media Type ID - must be numeric';
+            }
+
+            // if (!MediaType::get($data['media_type_id'])) {
+            //     $errors[] = 'No media type with that ID exists';
+            // }
+        }
+
+        // GenreId (if present, and not null (empty string))
+        if (array_key_exists('genre_id', $data) && $data['genre_id'] !== '') {
+            // Check if the id is valid
+            if (!ValidationHelper::isValidId($data['genre_id'])) {
+                $errors[] = 'Invalid Genre ID - must be numeric';
+            }
+            // if (!Genre::get($data['genre_id'])) {
+            //     $errors[] = 'No genre with that ID exists';
+            // }
+        }
+            
+        // Composer (if present and not null (empty string))
+        if (array_key_exists('composer', $data) && $data['composer'] !== '') {
+            if (!is_string($data['composer'])) {
+                $errors[] = 'Composer must be a string.';
+            }
+
+            if (strlen($data['composer']) > self::MAX_COMPOSER_LENGTH) {
+                $errors[] = 'Composer is too long - Max ' . self::MAX_COMPOSER_LENGTH . ' characters';
+            }
+        }
+
+        // Milliseconds (if it's an insert or if it's an update and the media type is present)
+        if ($isInsert || array_key_exists('milliseconds', $data)) {
+            $milliseconds = $data['milliseconds'] ?? null;
+            // Check if milliseconds is an int or numeric string
+            if (!filter_var($milliseconds, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
+                $errors[] = 'Milliseconds is required and must be a positive integer.';
+            }
+        }
+
+        // Bytes (if present and not null (empty string))
+        if (array_key_exists('bytes', $data) && $data['bytes'] !== '') {
+            // Check if bytes is an int or numeric string
+            if (!filter_var($data['bytes'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
+                $errors[] = 'Bytes must be a positive integer.';
+            }
+        }
+        
+        // UnitPrice (if it's an insert or if it's an update and the media type is present)
+        if ($isInsert || array_key_exists('unit_price', $data)) {
+            $unitPrice = $data['unit_price'] ?? null;
+            // Check if Unit price is a positiv integer (no - in front) and if it matches the DECIMAL format in db
+            if (!filter_var($unitPrice, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^\d{1,8}(\.\d{1,2})?$/']])) {
+                $errors[] = 'Unit price is required and must be a positive integer, with max ' . self::MAX_PRICE_DIGITS . ' digit - Where ' . self::MAX_PRICE_DECIMALS . ' can be decimals';
+            }
+        }
+
+        return $errors;
+    }
+
+
+    public static function add(array $columns): int|array
+    {
+        $validationErrors = [];
+
+        // Validate the new track
+        $validationErrors = self::validateTrack($columns, true);
+
+        // If validation fails, return validation errors
+        if (!empty($validationErrors)) {
+            return $validationErrors;
+        }
+
+        // Handle the required columns
+        $name = trim($columns['name'] ?? '');
+        $mediaTypeId = $columns['media_type_id'] ?? null;
+        $milliseconds = $columns['milliseconds'] ?? null;
+        $unitPrice = $columns['unit_price'] ?? null;
+
+        $dbColumnNames = ['Name', 'MediaTypeId', 'Milliseconds', 'UnitPrice'];
+        $namedParam = [':trackName', ':mediaTypeID', ':milliseconds', ':unitPrice'];
+        $params = [
+            'trackName' => $name,
+            'mediaTypeID' => (int) $mediaTypeId,
+            'milliseconds' => (int) $milliseconds,
+            'unitPrice' => (float) $unitPrice
+        ];
+
+        // Handle the optional columns if they are present
+        $optionalFields = [
+            'album_id' => ['dbColumnName' => 'AlbumId', 'namedParam' => 'albumID', 'cast' => 'int'],
+            'genre_id' => ['dbColumnName' => 'GenreId', 'namedParam' => 'genreID', 'cast' => 'int'],
+            'composer' => ['dbColumnName' => 'Composer', 'namedParam' => 'composer', 'cast' => 'string'],
+            'bytes' => ['dbColumnName' => 'Bytes', 'namedParam' => 'bytes', 'cast' => 'int'],
+        ];
+
+        foreach ($optionalFields as $key => $config) {
+            // Check if the optional column is present and not an empty string
+            if (isset($columns[$key]) && $columns[$key] !== '') {
+
+                // Casting the value to correct data type
+                $value = $columns[$key];
+                if ($config['cast'] === 'int') {
+                    $value = (int) $value;
+                } elseif ($config['cast'] === 'float') {
+                    $value = (float) $value;
+                } else {
+                    $value = trim($value);
+                }
+
+                // Store the db column name
+                $dbColumnNames[] = $config['dbColumnName'];
+                // Store the named parameter 
+                $namedParam[] = ':' . $config['namedParam'];
+                // Store the param and value for the prepared SQL
+                $params[$config['namedParam']] = $value;
+            }
+        }
+
+        // Insert new track in db
+        $sql = 'INSERT INTO Track (' . implode(', ', $dbColumnNames) . ') VALUES (' . implode(', ', $namedParam) . ')';
+
+        return self::execute($sql, $params);
     }
 }
