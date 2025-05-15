@@ -32,4 +32,32 @@ class Playlists extends \Core\Controller
 
         ResponseHelper::jsonResponse($playlists, $links);
     }
+
+    /**
+     * Finding track by id
+     */
+    public function findAction(): void
+    {
+        $playlistID = $this->validateID($this->routeParams['playlist_id'] ?? null, 'Playlist ID');
+
+        $playlist = Playlist::get($playlistID);
+
+        if (!$playlist) {
+            ResponseHelper::jsonError('No playlist found with that ID');
+            throw new \Exception('No playlist found with that ID', 404);
+        }
+
+        // Find tracks on playlist
+        $playlistsTracks = Playlist::getTracks($playlistID);
+
+        if (!$playlistsTracks) {
+            $playlist[0]['Tracks'] = 'No tracks connected to playlist';
+        } else {
+            $playlist[0]['Tracks'] = $playlistsTracks;
+        }
+
+        $links = LinkBuilder::playlistLinks($playlistID); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse($playlist, $links);
+    }
 }

@@ -104,7 +104,7 @@ document.querySelector(".genres").addEventListener("click", (e) => testApi(e.cur
 // Artists
 document.querySelector(".all_playlists").addEventListener("click", (e) => testApi(e.currentTarget, "playlists?api_key=abcd1234"));
 document.querySelector(".search_playlist_name").addEventListener("click", (e) => testApi(e.currentTarget, "playlists?s=mu&api_key=abcd1234"));
-// document.querySelector(".artist").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234"));
+document.querySelector(".playlist").addEventListener("click", (e) => testApi(e.currentTarget, "playlists/13?api_key=abcd1234"));
 // document.querySelector(".artist_albums").addEventListener("click", (e) => testApi(e.currentTarget, "artists/24/albums?api_key=abcd1234"));
 // document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
 // document.querySelector(".artist_add").addEventListener("click", (e) =>

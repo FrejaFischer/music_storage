@@ -24,4 +24,30 @@ class Playlist extends \Core\Model
             'search' => "%$searchText%"
         ]);
     }
+
+    public static function get(int $playlistID): array
+    {
+        $sql = <<<'SQL'
+            SELECT * FROM Playlist 
+            WHERE PlaylistId = :playlistID
+        SQL;
+
+        return self::execute($sql, [
+            'playlistID' => $playlistID
+        ]);
+    }
+
+    public static function getTracks(int $playlistID): array
+    {
+        $sql = <<<'SQL'
+            SELECT Track.TrackId, Track.Name
+            FROM Track 
+            INNER JOIN PlaylistTrack ON PlaylistTrack.TrackId = Track.TrackId
+            WHERE PlaylistTrack.PlaylistId = :playlistID
+        SQL;
+
+        return self::execute($sql, [
+            'playlistID' => $playlistID
+        ]);
+    }
 }

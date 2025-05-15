@@ -167,6 +167,10 @@ $router->add('playlists',[
     'controller' => 'Playlists',
     'action' => 'get'
 ]);
+$router->add('playlists/{playlist_id}',[
+    'controller' => 'Playlists',
+    'action' => 'find'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[
