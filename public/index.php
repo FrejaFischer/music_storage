@@ -139,6 +139,11 @@ $router->add('tracks',[
     'action' => 'create',
     'method' => 'POST'
 ]);
+$router->add('tracks/{track_id}',[
+    'controller' => 'Tracks',
+    'action' => 'update',
+    'method' => 'POST'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[

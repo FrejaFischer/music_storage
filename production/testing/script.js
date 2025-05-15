@@ -69,7 +69,6 @@ document.querySelector(".album_update").addEventListener("click", (e) =>
 document.querySelector(".search_tracks_name").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
 document.querySelector(".search_tracks_composer").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?composer=philip&api_key=abcd1234"));
 document.querySelector(".track").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/10?api_key=abcd1234"));
-// document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 // document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
 document.querySelector(".track_add").addEventListener("click", (e) =>
   testApi(e.currentTarget, "tracks?api_key=abcd1234", "POST", {
@@ -83,12 +82,18 @@ document.querySelector(".track_add").addEventListener("click", (e) =>
     unit_price: 9.99,
   })
 );
-// document.querySelector(".album_update").addEventListener("click", (e) =>
-//   testApi(e.currentTarget, "albums/10?api_key=abcd1234", "POST", {
-//     title: "New title",
-//     artist_id: 2,
-//   })
-// );
+document.querySelector(".track_update").addEventListener("click", (e) =>
+  testApi(e.currentTarget, "tracks/10?api_key=abcd1234", "POST", {
+    name: "Updated track",
+    album_id: 2,
+    media_type_id: 2,
+    genre_id: 2,
+    composer: "Good composer",
+    milliseconds: 1000,
+    bytes: 100000,
+    unit_price: 9.99,
+  })
+);
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {

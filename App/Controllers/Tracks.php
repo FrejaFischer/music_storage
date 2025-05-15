@@ -74,4 +74,27 @@ class Tracks extends \Core\Controller
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully added', 'Track ID' => $result], $links);
     }
+
+    public function updateAction(): void
+    {
+        $trackID = $this->validateID($this->routeParams['track_id'] ?? null, 'Track ID');
+
+        $result = Track::update($_POST, $trackID);
+
+        if (gettype($result) === 'array') {
+            $validationMessage = '';
+
+            // loop over all validation errors
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError("Track not updated. Validation errors: $validationMessage");
+            throw new \Exception("Track not updated. Validation errors: $validationMessage", 400);
+        }
+
+        $links = LinkBuilder::albumLinks($trackID, "/tracks/$trackID", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Track succesfully updated', 'Track ID' => $trackID], $links);
+    }
 }

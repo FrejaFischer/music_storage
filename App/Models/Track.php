@@ -224,8 +224,6 @@ class Track extends \Core\Model
                     $value = (int) $value;
                 } elseif ($config['cast'] === 'float') {
                     $value = (float) $value;
-                } else {
-                    $value = trim($value);
                 }
 
                 // Store the db column name
@@ -240,6 +238,60 @@ class Track extends \Core\Model
         // Insert new track in db
         $sql = 'INSERT INTO Track (' . implode(', ', $dbColumnNames) . ') VALUES (' . implode(', ', $namedParam) . ')';
 
+        return self::execute($sql, $params);
+    }
+
+    public static function update(array $columns, int $trackID): int|array
+    {
+        $validationErrors = [];
+
+        // Validate the new track
+        $validationErrors = self::validateTrack($columns, false);
+
+        // If validation fails, return validation errors
+        if (!empty($validationErrors)) {
+            return $validationErrors;
+        }
+
+        $set = [];
+        $params = ['trackID' => $trackID];
+
+        $possibleFields = [
+            'name' => ['dbColumnName' => 'Name', 'namedParam' => 'trackName', 'cast' => 'string'],
+            'album_id' => ['dbColumnName' => 'AlbumId', 'namedParam' => 'albumID', 'cast' => 'int'],
+            'media_type_id' => ['dbColumnName' => 'MediaTypeId', 'namedParam' => 'mediaTypeID', 'cast' => 'int'],
+            'genre_id' => ['dbColumnName' => 'GenreId', 'namedParam' => 'genreID', 'cast' => 'int'],
+            'composer' => ['dbColumnName' => 'Composer', 'namedParam' => 'composer', 'cast' => 'string'],
+            'milliseconds' => ['dbColumnName' => 'Milliseconds', 'namedParam' => 'milliseconds', 'cast' => 'int'],
+            'bytes' => ['dbColumnName' => 'Bytes', 'namedParam' => 'bytes', 'cast' => 'int'],
+            'unit_price' => ['dbColumnName' => 'UnitPrice', 'namedParam' => 'unitPrice', 'cast' => 'float'],
+        ];
+
+        foreach ($possibleFields as $key => $config) {
+            // Check if the field is present in the update
+            if (isset($columns[$key])) {
+
+                // Trim and cast the value to correct data type
+                $value = trim($columns[$key]);
+                if ($config['cast'] === 'int') {
+                    $value = (int) $value;
+                } elseif ($config['cast'] === 'float') {
+                    $value = (float) $value;
+                }
+
+                // Store the db column name and named parameter (dbColumnName = :namedParam)
+                $set[] = $config['dbColumnName'] . ' = :' . $config['namedParam'];
+                // Store the param and value for the prepared SQL
+                $params[$config['namedParam']] = $value;
+            }
+        }
+
+        // Check if there is something to update
+        if (empty($set)) {
+            return ['Found nothing to update'];
+        }
+    
+        $sql = "UPDATE Track SET " . implode(', ', $set) . " WHERE TrackId = :trackID";
         return self::execute($sql, $params);
     }
 }
