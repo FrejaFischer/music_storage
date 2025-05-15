@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\ResponseHelper;
 use App\Helpers\ValidationHelper;
 use App\Models\Album;
+use App\Models\MediaType;
 
 class Track extends \Core\Model
 {
@@ -125,11 +126,10 @@ class Track extends \Core\Model
             } else if (!ValidationHelper::isValidId($mediaTypeId)) {
                 // Check if the id is valid
                 $errors[] = 'Invalid Media Type ID - must be numeric';
+            } else if (!MediaType::get($data['media_type_id'])) {
+                // Check if there exist a media type with the ID
+                $errors[] = 'No media type with that ID exists';
             }
-
-            // if (!MediaType::get($data['media_type_id'])) {
-            //     $errors[] = 'No media type with that ID exists';
-            // }
         }
 
         // GenreId (if present, and not null (empty string))

@@ -12,4 +12,16 @@ class MediaType extends \Core\Model
 
         return self::execute($sql);
     }
+
+    public static function get(int $mediaTypeID): array
+    {
+        $sql = <<<'SQL'
+            SELECT * FROM MediaType
+            WHERE MediaTypeId = :mediaTypeID
+        SQL;
+
+        return self::execute($sql, [
+            'mediaTypeID' => $mediaTypeID
+        ]);
+    }
 }
