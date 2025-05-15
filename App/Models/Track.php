@@ -79,10 +79,10 @@ class Track extends \Core\Model
 
     /**
      * Validate function for validating track information. 
-     * Validated both on creation of new tracks and updates on track
+     * Accounts for if fields are required, and if not - if they then are present and have a value
      * @param array $data the track data
      * @param bool $isInsert if the validation is made on an insert or update of a track
-     * @return array of errors, empty if no errors
+     * @return array of errors, empty array if no errors
      */
     private static function validateTrack(array $data, bool $isInsert = false): array
     {
@@ -152,7 +152,7 @@ class Track extends \Core\Model
         // Milliseconds (if it's an insert or if it's an update and the media type is present)
         if ($isInsert || array_key_exists('milliseconds', $data)) {
             $milliseconds = $data['milliseconds'] ?? null;
-            // Check if milliseconds is an int or numeric string
+            // Check if milliseconds is an int or numeric string, and have minimum value of 1
             if (!filter_var($milliseconds, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
                 $errors[] = 'Milliseconds is required and must be a positive integer.';
             }
@@ -160,7 +160,7 @@ class Track extends \Core\Model
 
         // Bytes (if present and not null (empty string))
         if (array_key_exists('bytes', $data) && $data['bytes'] !== '') {
-            // Check if bytes is an int or numeric string
+            // Check if bytes is an int or numeric string, and have minimum value of 1
             if (!filter_var($data['bytes'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
                 $errors[] = 'Bytes must be a positive integer.';
             }
@@ -193,9 +193,9 @@ class Track extends \Core\Model
 
         // Handle the required columns
         $name = trim($columns['name'] ?? '');
-        $mediaTypeId = $columns['media_type_id'] ?? null;
-        $milliseconds = $columns['milliseconds'] ?? null;
-        $unitPrice = $columns['unit_price'] ?? null;
+        $mediaTypeId = trim($columns['media_type_id'] ?? '');
+        $milliseconds = trim($columns['milliseconds'] ?? '');
+        $unitPrice = trim($columns['unit_price'] ?? '');
 
         $dbColumnNames = ['Name', 'MediaTypeId', 'Milliseconds', 'UnitPrice'];
         $namedParam = [':trackName', ':mediaTypeID', ':milliseconds', ':unitPrice'];
@@ -219,7 +219,7 @@ class Track extends \Core\Model
             if (isset($columns[$key]) && $columns[$key] !== '') {
 
                 // Casting the value to correct data type
-                $value = $columns[$key];
+                $value = trim($columns[$key]);
                 if ($config['cast'] === 'int') {
                     $value = (int) $value;
                 } elseif ($config['cast'] === 'float') {
