@@ -54,6 +54,9 @@ class Tracks extends \Core\Controller
         ResponseHelper::jsonResponse($track, $links);
     }
 
+    /**
+     * Creating new track
+     */
     public function createAction(): void
     {
         $result = Track::add($_POST);
@@ -75,6 +78,9 @@ class Tracks extends \Core\Controller
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully added', 'Track ID' => $result], $links);
     }
 
+    /**
+     * Updating track
+     */
     public function updateAction(): void
     {
         $trackID = $this->validateID($this->routeParams['track_id'] ?? null, 'Track ID');
@@ -96,5 +102,34 @@ class Tracks extends \Core\Controller
         $links = LinkBuilder::trackLinks($trackID, "/tracks/$trackID", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully updated', 'Track ID' => $trackID], $links);
+    }
+
+    /**
+     * Deleting a track
+     */
+    public function deleteAction():void
+    {
+        $trackID = $this->validateID($this->routeParams['track_id'] ?? null, 'Track ID');
+
+        // Check if track belong to a playlist
+        $hasConnections = Track::isConnectedToPlaylist($trackID);
+
+        if ($hasConnections) {
+            ResponseHelper::jsonError('Track is still connected to one or many playlists. Track cannot be deleted');
+            throw new \Exception('Track is still connected to one or many playlists. Track cannot be deleted', 409);
+            // 409: request cannot be completed due to a conflict with the current state of the resource.
+        }
+
+        $trackIsDeleted = Track::delete($trackID);
+
+        // If no rows were affected
+        if (!$trackIsDeleted) {
+            ResponseHelper::jsonError('Track not found. Nothing was deleted.');
+            throw new \Exception('Track not found. Nothing was deleted.', 404);
+        }
+
+        $links = LinkBuilder::trackLinks($trackID, "/tracks/$trackID", 'DELETE'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Track deleted', 'Track ID' => $trackID], $links);
     }
 }

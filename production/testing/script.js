@@ -69,7 +69,7 @@ document.querySelector(".album_update").addEventListener("click", (e) =>
 document.querySelector(".search_tracks_name").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?s=best&api_key=abcd1234"));
 document.querySelector(".search_tracks_composer").addEventListener("click", (e) => testApi(e.currentTarget, "tracks?composer=philip&api_key=abcd1234"));
 document.querySelector(".track").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/10?api_key=abcd1234"));
-// document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
+document.querySelector(".track_delete").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/3506?api_key=abcd1234", "DELETE"));
 document.querySelector(".track_add").addEventListener("click", (e) =>
   testApi(e.currentTarget, "tracks?api_key=abcd1234", "POST", {
     name: "New track",

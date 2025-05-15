@@ -8,13 +8,16 @@ use App\Models\Album;
 
 class Track extends \Core\Model
 {
-    public const MAX_NAME_LENGTH = 200; 
-    public const MAX_COMPOSER_LENGTH = 220; 
-    public const MAX_PRICE_DIGITS = 10; 
-    public const MAX_PRICE_DECIMALS = 2; 
+    private const MAX_NAME_LENGTH = 200; 
+    private const MAX_COMPOSER_LENGTH = 220; 
+    private const MAX_PRICE_DIGITS = 10; 
+    private const MAX_PRICE_DECIMALS = 2; 
 
     /**
      * Method for searching for tracks by their name or composer
+     * @param string $searchText - The name or composer to search for
+     * @param string $searchColumn - The column in the db to search inside
+     * @return array - of results
      */
     public static function search(string $searchText, string $searchColumn): array
     {
@@ -51,6 +54,8 @@ class Track extends \Core\Model
 
     /**
      * Method for getting specific track by its ID
+     * @param int $trackID - the id of the track to get 
+     * @return array - of results
      */
     public static function get(int $trackID): array
     {
@@ -80,8 +85,8 @@ class Track extends \Core\Model
     /**
      * Validate function for validating track information. 
      * Accounts for if fields are required, and if not - if they then are present and have a value
-     * @param array $data the track data
-     * @param bool $isInsert if the validation is made on an insert or update of a track
+     * @param array $data - The track data
+     * @param bool $isInsert - If the validation is made on an insert or update of a track
      * @return array of errors, empty array if no errors
      */
     private static function validateTrack(array $data, bool $isInsert = false): array
@@ -178,7 +183,11 @@ class Track extends \Core\Model
         return $errors;
     }
 
-
+    /**
+     * Method for adding a new track
+     * @param array $columns - The data to insert
+     * @return int|array - Either the id of the new track or array of validation errors
+     */
     public static function add(array $columns): int|array
     {
         $validationErrors = [];
@@ -241,6 +250,12 @@ class Track extends \Core\Model
         return self::execute($sql, $params);
     }
 
+    /**
+     * Method for updating a track
+     * @param array $columns - The data to update the track with
+     * @param int $trackID - The id of the the track to update
+     * @return int|array - Either the id of the updated track or array of validation errors
+     */
     public static function update(array $columns, int $trackID): int|array
     {
         $validationErrors = [];
@@ -293,5 +308,44 @@ class Track extends \Core\Model
     
         $sql = "UPDATE Track SET " . implode(', ', $set) . " WHERE TrackId = :trackID";
         return self::execute($sql, $params);
+    }
+
+    /**
+     * Method for deleting a track
+     * @param int $trackID - The id of the track to delete
+     * @return bool - True if succes, false it not
+     */
+    public static function delete(int $trackID): bool
+    {
+        $sql = <<<'SQL'
+            DELETE FROM Track WHERE TrackId = :trackID
+        SQL;
+
+        return self::execute($sql, [
+            'trackID' => $trackID
+        ]);
+    }
+
+    /**
+     * Method for checking if track is connected to any playlists
+     * @param int $trackID - The track to check with
+     * @return bool - True if there exist a connection, false if not
+     */
+    public static function isConnectedToPlaylist(int $trackID): bool
+    {
+        $sql = <<<'SQL'
+            SELECT * FROM PlaylistTrack WHERE TrackId = :trackID
+        SQL;
+
+        $connections = self::execute($sql, [
+            'trackID' => $trackID
+        ]);
+
+        // Check if there is any connections
+        if ($connections) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
