@@ -71,12 +71,18 @@ document.querySelector(".search_tracks_composer").addEventListener("click", (e) 
 document.querySelector(".track").addEventListener("click", (e) => testApi(e.currentTarget, "tracks/10?api_key=abcd1234"));
 // document.querySelector(".albums_tracks").addEventListener("click", (e) => testApi(e.currentTarget, "albums/24/tracks?api_key=abcd1234"));
 // document.querySelector(".album_delete").addEventListener("click", (e) => testApi(e.currentTarget, "albums/348?api_key=abcd1234", "DELETE"));
-// document.querySelector(".album_add").addEventListener("click", (e) =>
-//   testApi(e.currentTarget, "albums?api_key=abcd1234", "POST", {
-//     title: "New album",
-//     artist_id: 2,
-//   })
-// );
+document.querySelector(".track_add").addEventListener("click", (e) =>
+  testApi(e.currentTarget, "tracks?api_key=abcd1234", "POST", {
+    name: "New track",
+    album_id: 2,
+    media_type_id: 2,
+    genre_id: 2,
+    composer: "Good composer",
+    milliseconds: 1000,
+    bytes: 100000,
+    unit_price: 9.99,
+  })
+);
 // document.querySelector(".album_update").addEventListener("click", (e) =>
 //   testApi(e.currentTarget, "albums/10?api_key=abcd1234", "POST", {
 //     title: "New title",
