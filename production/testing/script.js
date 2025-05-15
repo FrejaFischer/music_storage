@@ -112,6 +112,11 @@ document.querySelector(".playlist_add").addEventListener("click", (e) =>
     name: "New Playlist",
   })
 );
+document.querySelector(".assign_track").addEventListener("click", (e) =>
+  testApi(e.currentTarget, "playlists/2/tracks?api_key=abcd1234", "POST", {
+    track_id: 1,
+  })
+);
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {

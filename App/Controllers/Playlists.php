@@ -77,4 +77,31 @@ class Playlists extends \Core\Controller
 
         ResponseHelper::jsonResponse(['Message' => 'Playlist succesfully added', 'Playlist ID' => $result], $links);
     }
+
+    /**
+     * Assigns a track to playlist
+     */
+    public function trackAddAction(): void
+    {
+        $playlistID = $this->validateID($this->routeParams['playlist_id'] ?? null, 'Playlist ID');
+
+        // Check if playlist exist
+        $playlist = Playlist::get($playlistID);
+
+        if (!$playlist) {
+            ResponseHelper::jsonError('No playlist found with that ID');
+            throw new \Exception('No playlist found with that ID', 404);
+        }
+
+        $result = Playlist::addTrack($_POST, $playlistID);
+
+        if (gettype($result) === 'array') {
+            ResponseHelper::jsonError('Track not assigned. Validation errors: ' . $result[0]);
+            throw new \Exception('Track not assigned. Validation errors: ' . $result[0], 400);
+        }
+
+        $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID/tracks", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Track succesfully assigned'], $links);
+    }
 }

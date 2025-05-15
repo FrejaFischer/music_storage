@@ -176,6 +176,11 @@ $router->add('playlists',[
     'action' => 'create',
     'method' => 'POST'
 ]);
+$router->add('playlists/{playlist_id}/tracks',[
+    'controller' => 'Playlists',
+    'action' => 'trackAdd',
+    'method' => 'POST'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[
