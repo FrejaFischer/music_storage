@@ -162,6 +162,12 @@ $router->add('genres',[
     'action' => 'get'
 ]);
 
+//// Playlists ////
+$router->add('playlists',[
+    'controller' => 'Playlists',
+    'action' => 'get'
+]);
+
 //// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',

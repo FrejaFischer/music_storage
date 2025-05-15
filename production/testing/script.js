@@ -101,6 +101,18 @@ document.querySelector(".media_types").addEventListener("click", (e) => testApi(
 // Genres
 document.querySelector(".genres").addEventListener("click", (e) => testApi(e.currentTarget, "genres?api_key=abcd1234"));
 
+// Artists
+document.querySelector(".all_playlists").addEventListener("click", (e) => testApi(e.currentTarget, "playlists?api_key=abcd1234"));
+document.querySelector(".search_playlist_name").addEventListener("click", (e) => testApi(e.currentTarget, "playlists?s=mu&api_key=abcd1234"));
+// document.querySelector(".artist").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234"));
+// document.querySelector(".artist_albums").addEventListener("click", (e) => testApi(e.currentTarget, "artists/24/albums?api_key=abcd1234"));
+// document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
+// document.querySelector(".artist_add").addEventListener("click", (e) =>
+//   testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
+//     name: "New Artist",
+//   })
+// );
+
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {
   el.addEventListener("click", () => {
