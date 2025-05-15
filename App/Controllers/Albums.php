@@ -112,7 +112,7 @@ class Albums extends \Core\Controller
             throw new \Exception('Album not added. Validation errors: ' . $result[0], 400);
         }
 
-        $links = LinkBuilder::albumLinks($result, "/albums/$result", 'POST'); // Get HATEOAS links
+        $links = LinkBuilder::albumLinks($result, "/albums", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Album succesfully added', 'Album ID' => $result], $links);
     }

@@ -73,7 +73,7 @@ class Tracks extends \Core\Controller
             throw new \Exception("Track not added. Validation errors: $validationMessage", 400);
         }
 
-        $links = LinkBuilder::trackLinks($result, "/tracks/$result", 'POST'); // Get HATEOAS links
+        $links = LinkBuilder::trackLinks($result, "/tracks", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully added', 'Track ID' => $result], $links);
     }

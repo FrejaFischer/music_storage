@@ -109,7 +109,7 @@ class Artists extends \Core\Controller
             throw new \Exception('Artist not added. Validation errors: ' . $result[0], 400);
         }
 
-        $links = LinkBuilder::artistLinks($result, "/artists/$result", 'POST'); // Get HATEOAS links
+        $links = LinkBuilder::artistLinks($result, "/artists", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Artist succesfully added', 'Artist ID' => $result], $links);
     }
