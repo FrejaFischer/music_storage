@@ -6,6 +6,7 @@ use App\Helpers\ResponseHelper;
 use App\Helpers\ValidationHelper;
 use App\Models\Album;
 use App\Models\MediaType;
+use App\Models\Genres;
 
 class Track extends \Core\Model
 {
@@ -137,10 +138,9 @@ class Track extends \Core\Model
             // Check if the id is valid
             if (!ValidationHelper::isValidId($data['genre_id'])) {
                 $errors[] = 'Invalid Genre ID - must be numeric';
+            } else if (!Genre::get($data['genre_id'])) {
+                $errors[] = 'No genre with that ID exists';
             }
-            // if (!Genre::get($data['genre_id'])) {
-            //     $errors[] = 'No genre with that ID exists';
-            // }
         }
             
         // Composer (if present and not null (empty string))
