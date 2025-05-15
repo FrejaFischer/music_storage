@@ -156,6 +156,12 @@ $router->add('media-types',[
     'action' => 'get'
 ]);
 
+//// Genres ////
+$router->add('genres',[
+    'controller' => 'Genres',
+    'action' => 'get'
+]);
+
 //// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',
