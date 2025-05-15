@@ -65,8 +65,8 @@ class Artist extends \Core\Model
 
         $name = trim($columns['name'] ?? '');
 
-        if (empty($name)) {
-            $validationErrors[] = 'Name is mandatory';
+        if (empty($name) || !is_string($name)) {
+            $validationErrors[] = 'Name is mandatory and must be a string';
         }
         if (strlen($name) > self::MAX_NAME_LENGTH) {
             $validationErrors[] = 'Artists name is too long - Max ' . self::MAX_NAME_LENGTH . ' characters';

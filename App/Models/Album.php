@@ -86,8 +86,8 @@ class Album extends \Core\Model
     private static function validateTitle(string $title): array
     {
         $errors = [];
-        if (empty($title)) {
-            $errors[] = 'Title is mandatory';
+        if (empty($title) || !is_string($title)) {
+            $errors[] = 'Title is mandatory and must be a string';
         }
         if (strlen($title) > self::MAX_TITLE_LENGTH) {
             $errors[] = 'Album title is too long - Max ' . self::MAX_TITLE_LENGTH . ' characters';
