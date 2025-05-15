@@ -95,6 +95,9 @@ document.querySelector(".track_update").addEventListener("click", (e) =>
   })
 );
 
+// Media Types
+document.querySelector(".media_types").addEventListener("click", (e) => testApi(e.currentTarget, "media-types?api_key=abcd1234"));
+
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {
   el.addEventListener("click", () => {

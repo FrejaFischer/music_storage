@@ -150,6 +150,12 @@ $router->add('tracks/{track_id}',[
     'method' => 'DELETE'
 ]);
 
+//// Media Types ////
+$router->add('media-types',[
+    'controller' => 'MediaTypes',
+    'action' => 'get'
+]);
+
 //// Fake routes for testing ////
 $router->add('test',[
     'controller' => 'test',
