@@ -93,7 +93,7 @@ class Tracks extends \Core\Controller
             throw new \Exception("Track not updated. Validation errors: $validationMessage", 400);
         }
 
-        $links = LinkBuilder::albumLinks($trackID, "/tracks/$trackID", 'POST'); // Get HATEOAS links
+        $links = LinkBuilder::trackLinks($trackID, "/tracks/$trackID", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully updated', 'Track ID' => $trackID], $links);
     }
