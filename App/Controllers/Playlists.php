@@ -60,4 +60,21 @@ class Playlists extends \Core\Controller
 
         ResponseHelper::jsonResponse($playlist, $links);
     }
+
+    /**
+     * Creating new playlist
+     */
+    public function createAction(): void
+    {
+        $result = Playlist::add($_POST);
+
+        if (gettype($result) === 'array') {
+            ResponseHelper::jsonError('Playlist not added. Validation errors: ' . $result[0]);
+            throw new \Exception('Playlist not added. Validation errors: ' . $result[0], 400);
+        }
+
+        $links = LinkBuilder::playlistLinks($result, "/playlists", 'POST'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Playlist succesfully added', 'Playlist ID' => $result], $links);
+    }
 }

@@ -107,11 +107,11 @@ document.querySelector(".search_playlist_name").addEventListener("click", (e) =>
 document.querySelector(".playlist").addEventListener("click", (e) => testApi(e.currentTarget, "playlists/13?api_key=abcd1234"));
 // document.querySelector(".artist_albums").addEventListener("click", (e) => testApi(e.currentTarget, "artists/24/albums?api_key=abcd1234"));
 // document.querySelector(".artist_delete").addEventListener("click", (e) => testApi(e.currentTarget, "artists/30?api_key=abcd1234", "DELETE"));
-// document.querySelector(".artist_add").addEventListener("click", (e) =>
-//   testApi(e.currentTarget, "artists?api_key=abcd1234", "POST", {
-//     name: "New Artist",
-//   })
-// );
+document.querySelector(".playlist_add").addEventListener("click", (e) =>
+  testApi(e.currentTarget, "playlists?api_key=abcd1234", "POST", {
+    name: "New Playlist",
+  })
+);
 
 // Clear
 document.querySelectorAll(".clear").forEach((el) => {
