@@ -4882,6 +4882,384 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "remove track - playlist id invalid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/invalid/tracks/6?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"invalid",
+										"tracks",
+										"6"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove track - track id invalid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/17/tracks/invalid?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"17",
+										"tracks",
+										"invalid"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove track - playlist not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/170/tracks/6?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"170",
+										"tracks",
+										"6"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove track - track not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/17/tracks/6000?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"17",
+										"tracks",
+										"6000"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove track - No existing connection",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/17/tracks/6?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"17",
+										"tracks",
+										"6"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "playlist - playlist id invalid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/invalid?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"invalid"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "playlist - playlist not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/100?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"100"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "playlist - playlist still has tracks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 409\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/playlists/1?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"playlists",
+										"1"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -7206,6 +7584,100 @@
 								"playlists",
 								"4",
 								"tracks"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove track from playlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/playlists/4/tracks/1?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"playlists",
+								"4",
+								"tracks",
+								"1"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "abcd1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "playlist by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Contains success status\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/playlists/19?api_key=abcd1234",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"playlists",
+								"19"
 							],
 							"query": [
 								{
