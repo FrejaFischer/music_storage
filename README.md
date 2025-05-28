@@ -1,6 +1,6 @@
 # PHP exam project - API for music storage
 
-This is an PHP REST API for music storage.
+This is an PHP REST API for music storage. The API requires an API key to work.
 
 ## Endpoints
 
