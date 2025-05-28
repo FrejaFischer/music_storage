@@ -1,5 +1,57 @@
 # PHP exam project - API for music storage
 
+This is an PHP REST API for music storage.
+
+## Endpoints
+
+You can request these endpoints:
+
+### artists
+
+- GET /artists
+- GET /artists?s=search
+- GET /artists/{artist_id}
+- GET /artists/{artist_id}/albums
+- POST /artists
+- DELETE /artists/{artist_id}
+
+### albums
+
+- GET /albums
+- GET /albums?s=search
+- GET /albums/{album_id}
+- GET /albums/{album_id}/tracks
+- POST /albums
+- POST /albums/{album_id}
+- DELETE /albums/{album_id}
+
+### tracks
+
+- GET /tracks?s=search
+- GET /tracks/{track_id}
+- GET /tracks?composer=composer_search
+- POST /tracks
+- POST /tracks/{track_id}
+- DELETE /tracks/{track_id}
+
+### genres
+
+- GET /genres
+
+### media-types
+
+- GET /media-types
+
+### playlists
+
+- GET /playlists
+- GET /playlists?s=search
+- GET /playlists/{playlist_id}
+- POST /playlists
+- POST /playlists/{playlist_id}/tracks
+- DELETE /playlists/{playlist_id}/tracks/{track_id}
+- DELETE /playlists/{playlist_id}
+
 ## Data
 
 Data from Chinook database:
