@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Helpers\ResponseHelper;
 use App\Helpers\LinkBuilder;
 use App\Models\Playlist;
+use App\Models\Track;
 
 class Playlists extends \Core\Controller
 {
@@ -103,5 +104,40 @@ class Playlists extends \Core\Controller
         $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID/tracks", 'POST'); // Get HATEOAS links
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully assigned'], $links);
+    }
+
+    /**
+     * Removes a track from a playlist
+     */
+    public function trackRemoveAction(): void
+    {
+        $playlistID = $this->validateID($this->routeParams['playlist_id'] ?? null, 'Playlist ID');
+        $trackID = $this->validateID($this->routeParams['track_id'] ?? null, 'Track ID');
+
+        // Check if playlist exist
+        $playlist = Playlist::get($playlistID);
+        if (!$playlist) {
+            ResponseHelper::jsonError('No playlist found with that ID');
+            throw new \Exception('No playlist found with that ID', 404);
+        }
+        
+        // Check if track exist
+        $track = Track::get($trackID);
+        if (!$track) {
+            ResponseHelper::jsonError('No track found with that ID');
+            throw new \Exception('No track found with that ID', 404);
+        }
+
+        $trackIsRemoved = Playlist::removeTrack($playlistID, $trackID);
+
+        // If no rows were affected
+        if (!$trackIsRemoved) {
+            ResponseHelper::jsonError('The track do not have an existing connection to the playlist. Track can therefor not be removed.');
+            throw new \Exception('The track do not have an existing connection to the playlist. Track can therefor not be removed.', 404);
+        }
+
+        $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID/tracks/$trackID", 'DELETE', $trackID); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Track succesfully removed'], $links);
     }
 }

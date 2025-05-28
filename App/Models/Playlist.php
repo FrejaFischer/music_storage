@@ -190,7 +190,25 @@ class Playlist extends \Core\Model
         $sql = <<<'SQL'
             INSERT INTO PlaylistTrack(PlaylistId, TrackId) VALUES (:playlistID,:trackID)
         SQL;
-
+        
+        return self::execute($sql, [
+            'playlistID' => $playlistID,
+            'trackID' => $trackID
+        ]);
+    }
+    
+    /**
+     * Method for removing a track from a playlist
+     * @param int $playlistID - The playlist to remove from
+     * @param int $trackID - The track to remove
+     * @return bool - True if succes, false it not
+     */
+    public static function removeTrack(int $playlistID, int $trackID): bool
+    {
+        $sql = <<<'SQL'
+            DELETE FROM PlaylistTrack WHERE PlaylistId = :playlistID AND TrackId = :trackID
+        SQL;
+        
         return self::execute($sql, [
             'playlistID' => $playlistID,
             'trackID' => $trackID
