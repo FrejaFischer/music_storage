@@ -49,7 +49,7 @@ class Tracks extends \Core\Controller
             throw new \Exception('No track found with that ID', 404);
         }
 
-        $links = LinkBuilder::trackLinks($trackID); // Get HATEOAS links
+        $links = LinkBuilder::trackLinks($trackID, "/tracks/$trackID"); // Get HATEOAS links
 
         ResponseHelper::jsonResponse($track, $links);
     }

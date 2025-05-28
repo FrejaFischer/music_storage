@@ -23,7 +23,7 @@ class Playlists extends \Core\Controller
         } else {
             // All playlists
             $playlists = Playlist::getAll();
-            $links = LinkBuilder::playlistCollectionLinks(); // Get HATEOAS links
+            $links = LinkBuilder::playlistCollectionLinks('/playlists'); // Get HATEOAS links
         }
         
         if (!$playlists) {
@@ -57,7 +57,7 @@ class Playlists extends \Core\Controller
             $playlist[0]['Tracks'] = $playlistsTracks;
         }
 
-        $links = LinkBuilder::playlistLinks($playlistID); // Get HATEOAS links
+        $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID"); // Get HATEOAS links
 
         ResponseHelper::jsonResponse($playlist, $links);
     }

@@ -20,7 +20,7 @@ class Artists extends \Core\Controller
             $links = LinkBuilder::artistCollectionLinks('/artists?s={search}'); // Get HATEOAS links
         } else {
             $artists = Artist::getAll();
-            $links = LinkBuilder::artistCollectionLinks(); // Get HATEOAS links
+            $links = LinkBuilder::artistCollectionLinks('/artists'); // Get HATEOAS links
         }
         
         if (!$artists) {
@@ -42,7 +42,7 @@ class Artists extends \Core\Controller
             throw new \Exception('No artist found with that ID', 404);
         }
 
-        $links = LinkBuilder::artistLinks($artistID); // Get HATEOAS links
+        $links = LinkBuilder::artistLinks($artistID, "/artists/$artistID"); // Get HATEOAS links
 
         ResponseHelper::jsonResponse($artist, $links);
     }

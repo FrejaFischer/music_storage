@@ -22,7 +22,7 @@ class Albums extends \Core\Controller
         } else {
             // All albums and their artist
             $albums = Album::getAll();
-            $links = LinkBuilder::albumCollectionLinks(); // Get HATEOAS links
+            $links = LinkBuilder::albumCollectionLinks('/albums'); // Get HATEOAS links
         }
         
         if (!$albums) {
@@ -44,7 +44,7 @@ class Albums extends \Core\Controller
             throw new \Exception('No album found with that ID', 404);
         }
 
-        $links = LinkBuilder::albumLinks($albumID); // Get HATEOAS links
+        $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID"); // Get HATEOAS links
 
         ResponseHelper::jsonResponse($album, $links);
     }
