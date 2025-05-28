@@ -16,7 +16,6 @@ abstract class Model
     // Database error messages (Production mode)
     const DB_CONN_ERROR = 'Database connection unsuccessful';
     const DB_SQL_ERROR = 'Database query unsuccessful';
-    // const NO_ROWS = 'No rows affected';
 
     protected static function getDB(): PDO
     {

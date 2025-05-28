@@ -64,13 +64,14 @@ class Tracks extends \Core\Controller
         if (gettype($result) === 'array') {
             $validationMessage = '';
 
-            // loop over all validation errors
+            // loop over all validation errors to combine them in string
             foreach ($result as $message) {
                 $validationMessage .= $message . ' ';
             }
 
-            ResponseHelper::jsonError("Track not added. Validation errors: $validationMessage");
+            ResponseHelper::jsonError("Track not added, because of validation errors", $result);
             throw new \Exception("Track not added. Validation errors: $validationMessage", 400);
+
         }
 
         $links = LinkBuilder::trackLinks($result, "/tracks", 'POST'); // Get HATEOAS links
@@ -90,12 +91,12 @@ class Tracks extends \Core\Controller
         if (gettype($result) === 'array') {
             $validationMessage = '';
 
-            // loop over all validation errors
+            // loop over all validation errors to combine them in string
             foreach ($result as $message) {
                 $validationMessage .= $message . ' ';
             }
 
-            ResponseHelper::jsonError("Track not updated. Validation errors: $validationMessage");
+            ResponseHelper::jsonError("Track not updated, because of validation errors", $result);
             throw new \Exception("Track not updated. Validation errors: $validationMessage", 400);
         }
 

@@ -16,11 +16,25 @@ class ResponseHelper
         exit;
     }
 
-    public static function jsonError(string $message): void
+    /**
+     * Send JSON response, with error status
+     * @param string $message - The main error message
+     * @param array $arrayMessage (optional) - An array of errors, if multiple errors should be sent
+     */
+    public static function jsonError(string $message, ?array $arrayMessage = []): void
     {
-        echo json_encode([
-            'status' => 'error',
-            'message' => $message
-        ]);
+        // Sends array of errors if given
+        if ($arrayMessage) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $message,
+                'errors' => $arrayMessage
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $message
+            ]);
+        }
     }
 }

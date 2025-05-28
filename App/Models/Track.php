@@ -6,7 +6,7 @@ use App\Helpers\ResponseHelper;
 use App\Helpers\ValidationHelper;
 use App\Models\Album;
 use App\Models\MediaType;
-use App\Models\Genres;
+use App\Models\Genre;
 
 class Track extends \Core\Model
 {

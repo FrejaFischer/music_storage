@@ -70,8 +70,15 @@ class Playlists extends \Core\Controller
         $result = Playlist::add($_POST);
 
         if (gettype($result) === 'array') {
-            ResponseHelper::jsonError('Playlist not added. Validation errors: ' . $result[0]);
-            throw new \Exception('Playlist not added. Validation errors: ' . $result[0], 400);
+            $validationMessage = '';
+
+            // loop over all validation errors to combine them in string
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError('Playlist not added, because of validation errors', $result);
+            throw new \Exception('Playlist not added. Validation errors: ' . $validationMessage, 400);
         }
 
         $links = LinkBuilder::playlistLinks($result, "/playlists", 'POST'); // Get HATEOAS links
@@ -97,8 +104,15 @@ class Playlists extends \Core\Controller
         $result = Playlist::addTrack($_POST, $playlistID);
 
         if (gettype($result) === 'array') {
-            ResponseHelper::jsonError('Track not assigned. Validation errors: ' . $result[0]);
-            throw new \Exception('Track not assigned. Validation errors: ' . $result[0], 400);
+            $validationMessage = '';
+
+            // loop over all validation errors to combine them in string
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError('Track not assigned, because of validation errors', $result);
+            throw new \Exception('Track not assigned. Validation errors: ' . $validationMessage, 400);
         }
 
         $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID/tracks", 'POST'); // Get HATEOAS links

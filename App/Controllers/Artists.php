@@ -105,8 +105,15 @@ class Artists extends \Core\Controller
         $result = Artist::add($_POST);
 
         if (gettype($result) === 'array') {
-            ResponseHelper::jsonError('Artist not added. Validation errors: ' . $result[0]);
-            throw new \Exception('Artist not added. Validation errors: ' . $result[0], 400);
+            $validationMessage = '';
+
+            // loop over all validation errors to combine them in string
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError('Artist not added, because of validation errors', $result);
+            throw new \Exception('Artist not added. Validation errors: ' . $validationMessage, 400);
         }
 
         $links = LinkBuilder::artistLinks($result, "/artists", 'POST'); // Get HATEOAS links

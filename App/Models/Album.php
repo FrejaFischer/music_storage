@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Artist;
+use App\Helpers\ValidationHelper;
 
 class Album extends \Core\Model
 {
@@ -98,9 +99,15 @@ class Album extends \Core\Model
     private static function validateArtistId(int $artistId): array
     {
         $errors = [];
-        if (!Artist::get($artistId)) {
+
+        // Check if the id is valid
+        if (!ValidationHelper::isValidId($artistId)) {
+            $errors[] = 'Invalid Artist ID - must be numeric';
+        } else if (!Artist::get($artistId)) {
+            // Check if there exist an artist with the ID
             $errors[] = 'No artist with that ID exists';
         }
+        
         return $errors;
     }
 

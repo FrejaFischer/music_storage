@@ -102,14 +102,18 @@ class Albums extends \Core\Controller
 
     public function createAction(): void
     {
-        // Validate the artist ID from POST
-        $this->validateID($_POST['artist_id'] ?? null, 'Artist ID');
-
         $result = Album::add($_POST);
 
         if (gettype($result) === 'array') {
-            ResponseHelper::jsonError('Album not added. Validation errors: ' . $result[0]);
-            throw new \Exception('Album not added. Validation errors: ' . $result[0], 400);
+             $validationMessage = '';
+
+            // loop over all validation errors to combine them in string
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError('Album not added, because of validation errors', $result);
+            throw new \Exception('Album not added. Validation errors: ' . $validationMessage, 400);
         }
 
         $links = LinkBuilder::albumLinks($result, "/albums", 'POST'); // Get HATEOAS links
@@ -121,16 +125,18 @@ class Albums extends \Core\Controller
     {
         $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
 
-        // Validate the artist ID from POST (if present)
-        if (isset($_POST['artist_id'])) {
-            $this->validateID($_POST['artist_id'] ?? null, 'Artist ID');
-        }
-
         $result = Album::update($_POST, $albumID);
 
         if (gettype($result) === 'array') {
-            ResponseHelper::jsonError('Album not updated. Validation errors: ' . $result[0]);
-            throw new \Exception('Album not updated. Validation errors: ' . $result[0], 400);
+            $validationMessage = '';
+
+            // loop over all validation errors to combine them in string
+            foreach ($result as $message) {
+                $validationMessage .= $message . ' ';
+            }
+
+            ResponseHelper::jsonError('Album not updated, because of validation errors', $result);
+            throw new \Exception('Album not updated. Validation errors: ' . $validationMessage, 400);
         }
 
         $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID", 'POST'); // Get HATEOAS links

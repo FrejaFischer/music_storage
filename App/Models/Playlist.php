@@ -119,7 +119,6 @@ class Playlist extends \Core\Model
        $validationErrors = [];
 
         $name = trim($columns['name'] ?? '');
-        // $validationErrors = self::validateName($name);
         $validationErrors = self::validate(['name' => $name]);
 
         if (!empty($validationErrors)) {
