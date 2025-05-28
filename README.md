@@ -52,6 +52,10 @@ You can request these endpoints:
 - DELETE /playlists/{playlist_id}/tracks/{track_id}
 - DELETE /playlists/{playlist_id}
 
+## Security measurements
+
+When using this API please prevent XSS attacks by escaping / encoding all the data received from the API.
+
 ## Data
 
 Data from Chinook database:
