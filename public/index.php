@@ -57,8 +57,9 @@ Logger::LogRequest($requestInfo);
 
 
 /**
- * Set content type in header to expect JSON
+ * Set headers for API response
  */
+header('X-Content-Type-Options: nosniff'); // Ensures the content-type header should be respected and not changed
 header('Content-Type: application/json');
 
 /**
