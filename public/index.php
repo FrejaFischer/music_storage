@@ -186,6 +186,11 @@ $router->add('playlists/{playlist_id}/tracks/{track_id}',[
     'action' => 'trackRemove',
     'method' => 'DELETE'
 ]);
+$router->add('playlists/{playlist_id}',[
+    'controller' => 'Playlists',
+    'action' => 'delete',
+    'method' => 'DELETE'
+]);
 
 //// Fake routes for testing ////
 $router->add('test',[

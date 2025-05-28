@@ -208,10 +208,26 @@ class Playlist extends \Core\Model
         $sql = <<<'SQL'
             DELETE FROM PlaylistTrack WHERE PlaylistId = :playlistID AND TrackId = :trackID
         SQL;
-        
+
         return self::execute($sql, [
             'playlistID' => $playlistID,
             'trackID' => $trackID
+        ]);
+    }
+
+    /**
+     * Method for deleting a playlist
+     * @param int $playlistID - The id of the playlist to delete
+     * @return bool - True if succes, false it not
+     */
+    public static function delete(int $playlistID): bool
+    {
+        $sql = <<<'SQL'
+            DELETE FROM Playlist WHERE PlaylistId = :playlistID
+        SQL;
+
+        return self::execute($sql, [
+            'playlistID' => $playlistID
         ]);
     }
 }

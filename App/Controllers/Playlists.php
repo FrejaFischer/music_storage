@@ -140,4 +140,33 @@ class Playlists extends \Core\Controller
 
         ResponseHelper::jsonResponse(['Message' => 'Track succesfully removed'], $links);
     }
+
+    /**
+     * Deleting a playlist
+     */
+    public function deleteAction():void
+    {
+        $playlistID = $this->validateID($this->routeParams['playlist_id'] ?? null, 'Playlist ID');
+
+        // Check if there are any tracks connected to the playlist
+        $tracks = Playlist::getTracks($playlistID);
+
+        if ($tracks) {
+            ResponseHelper::jsonError('Tracks is still connected to the playlist. Playlist cannot be deleted');
+            throw new \Exception('Tracks is still connected to the playlist. Playlist cannot be deleted', 409);
+            // 409: request cannot be completed due to a conflict with the current state of the resource.
+        }
+
+        $playlistIsDeleted = Playlist::delete($playlistID);
+
+        // If no rows were affected
+        if (!$playlistIsDeleted) {
+            ResponseHelper::jsonError('Playlist not found. Nothing was deleted.');
+            throw new \Exception('Playlist not found. Nothing was deleted.', 404);
+        }
+
+        $links = LinkBuilder::playlistLinks($playlistID, "/playlists/$playlistID", 'DELETE'); // Get HATEOAS links
+
+        ResponseHelper::jsonResponse(['Message' => 'Playlist deleted', 'Playlist ID' => $playlistID], $links);
+    }
 }
