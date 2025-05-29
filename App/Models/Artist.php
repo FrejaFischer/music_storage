@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Artist extends \Core\Model
 {
-    public const MAX_NAME_LENGTH = 120;
+    private const MAX_NAME_LENGTH = 120;
 
     public static function getAll(): array
     {

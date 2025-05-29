@@ -14,8 +14,8 @@ use App\Helpers\ResponseHelper;
 abstract class Model
  {
     // Database error messages (Production mode)
-    const DB_CONN_ERROR = 'Database connection unsuccessful';
-    const DB_SQL_ERROR = 'Database query unsuccessful';
+    private const DB_CONN_ERROR = 'Database connection unsuccessful';
+    private const DB_SQL_ERROR = 'Database query unsuccessful';
 
     protected static function getDB(): PDO
     {

@@ -7,7 +7,7 @@ use App\Models\Track;
 
 class Playlist extends \Core\Model
 {
-    public const MAX_NAME_LENGTH = 120;
+    private const MAX_NAME_LENGTH = 120;
 
     /**
      * Method for getting all playlists
