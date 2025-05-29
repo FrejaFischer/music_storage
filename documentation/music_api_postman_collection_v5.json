@@ -321,9 +321,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -372,9 +372,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -720,9 +720,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -776,9 +776,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -827,9 +827,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Missing Artist ID');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -878,9 +878,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -934,9 +934,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Invalid Artist ID');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1032,9 +1032,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1078,9 +1078,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1130,9 +1130,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Validation errors');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1182,9 +1182,9 @@
 											"pm.test(\"Status code is 400\", function () {",
 											"    pm.response.to.have.status(400);",
 											"});",
-											"pm.test(\"Validation error\", function () {",
+											"pm.test(\"Contains error status\", function () {",
 											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.message).to.includes('Invalid Artist ID');",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1213,6 +1213,58 @@
 									"path": [
 										"albums",
 										"348"
+									],
+									"query": [
+										{
+											"key": "api_key",
+											"value": "abcd1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update album - album don't exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"pm.test(\"Contains error status\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "artist_id",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/albums/355?api_key=abcd1234",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"albums",
+										"355"
 									],
 									"query": [
 										{
@@ -2688,6 +2740,58 @@
 											"path": [
 												"tracks",
 												"10"
+											],
+											"query": [
+												{
+													"key": "api_key",
+													"value": "abcd1234"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update track - track don't exist",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"pm.test(\"Contains error status\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.status).to.eql(\"error\");",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "name",
+													"value": "New name",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/tracks/3600?api_key=abcd1234",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"tracks",
+												"3600"
 											],
 											"query": [
 												{
@@ -7742,7 +7846,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8888/test/music_storage/public/artists?api_key=abcd1234",
+					"raw": "http://localhost:8888/test/music_storage-kopi/public/artists?api_key=abcd1234",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -7750,7 +7854,7 @@
 					"port": "8888",
 					"path": [
 						"test",
-						"music_storage",
+						"music_storage-kopi",
 						"public",
 						"artists"
 					],
