@@ -98,6 +98,10 @@ class Tracks extends \Core\Controller
 
             ResponseHelper::jsonError("Track not updated, because of validation errors", $result);
             throw new \Exception("Track not updated. Validation errors: $validationMessage", 400);
+        } else if ($result === false) {
+            // If no rows were affected
+            ResponseHelper::jsonError('Track not found. Nothing was updated.');
+            throw new \Exception('Track not found. Nothing was updated.', 404);
         }
 
         $links = LinkBuilder::trackLinks($trackID, "/tracks/$trackID", 'POST'); // Get HATEOAS links

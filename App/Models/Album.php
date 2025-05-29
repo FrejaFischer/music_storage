@@ -141,7 +141,13 @@ class Album extends \Core\Model
         ]);
     }
 
-    public static function update(array $columns, int $albumID): int|array
+    /**
+     * Method for updating an album
+     * @param array $columns - the date to update
+     * @param int $albumID - the album to update
+     * @return bool|array - Either true if rows affected, false if no rows affected (album not found) or array of validation errors
+     */
+    public static function update(array $columns, int $albumID): bool|array
     {
         $set = [];
         $params = ['albumID' => $albumID];

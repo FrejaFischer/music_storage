@@ -137,6 +137,10 @@ class Albums extends \Core\Controller
 
             ResponseHelper::jsonError('Album not updated, because of validation errors', $result);
             throw new \Exception('Album not updated. Validation errors: ' . $validationMessage, 400);
+        } else if ($result === false) {
+            // If no rows were affected
+            ResponseHelper::jsonError('Album not found. Nothing was updated.');
+            throw new \Exception('Album not found. Nothing was updated.', 404);
         }
 
         $links = LinkBuilder::albumLinks($albumID, "/albums/$albumID", 'POST'); // Get HATEOAS links

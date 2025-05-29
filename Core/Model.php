@@ -45,7 +45,7 @@ abstract class Model
      * For INSERTs, it returns the new PK value.
      * For DELETEs, it returns whether some rows has been affected.
      */
-    protected static function execute(string $sql, array $params = []): array|int
+    protected static function execute(string $sql, array $params = []): array|int|bool
     {
         try {
             $db = static::getDB();
@@ -66,6 +66,7 @@ abstract class Model
                 case 'INSERT':
                     return $db->lastInsertId();
                 case 'DELETE':
+                case 'UPDATE':
                     return $stmt->rowCount() > 0;
                 default:
                     return 0;

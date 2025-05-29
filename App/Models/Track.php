@@ -254,9 +254,9 @@ class Track extends \Core\Model
      * Method for updating a track
      * @param array $columns - The data to update the track with
      * @param int $trackID - The id of the the track to update
-     * @return int|array - Either the id of the updated track or array of validation errors
+     * @return bool|array - Either true if rows affected, false if no rows affected (track not found) or array of validation errors
      */
-    public static function update(array $columns, int $trackID): int|array
+    public static function update(array $columns, int $trackID): bool|array
     {
         $validationErrors = [];
 
