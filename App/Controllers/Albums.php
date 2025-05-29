@@ -33,6 +33,9 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse($albums, $links);
     }
 
+    /**
+     * Getting an album by id
+     */
     public function findAction(): void
     {
         $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
@@ -49,6 +52,9 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse($album, $links);
     }
 
+    /**
+     * Gets all track from an Album
+     */
     public function trackAction(): void
     {
         $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
@@ -74,6 +80,9 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse($albumsTracks, $links);
     }
 
+    /**
+     * Delete an album
+     */
     public function deleteAction():void
     {
         $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');
@@ -100,6 +109,9 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse(['Message' => 'Album deleted', 'Album ID' => $albumID], $links);
     }
 
+    /**
+     * Create new album
+     */
     public function createAction(): void
     {
         $result = Album::add($_POST);
@@ -121,6 +133,9 @@ class Albums extends \Core\Controller
         ResponseHelper::jsonResponse(['Message' => 'Album succesfully added', 'Album ID' => $result], $links);
     }
 
+    /**
+     * Update album
+     */
     public function updateAction(): void
     {
         $albumID = $this->validateID($this->routeParams['album_id'] ?? null, 'Album ID');

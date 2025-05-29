@@ -20,6 +20,9 @@ class Error
         }
     }
 
+    /**
+     * Handle exceptions by logging them to todays error log
+     */
     public static function exceptionHandler(\Throwable $exception): void
     {
         // HTTP status codes are treated

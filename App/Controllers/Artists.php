@@ -31,6 +31,9 @@ class Artists extends \Core\Controller
         ResponseHelper::jsonResponse($artists, $links);
     }
 
+    /**
+     * Find artist by id
+    */
     public function findAction(): void
     {
         $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
@@ -47,6 +50,9 @@ class Artists extends \Core\Controller
         ResponseHelper::jsonResponse($artist, $links);
     }
 
+    /**
+     * Gets all albums from an artist
+     */
     public function albumAction(): void
     {
         $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
@@ -73,6 +79,9 @@ class Artists extends \Core\Controller
 
     }
 
+    /**
+     * Delete an artist
+     */
     public function deleteAction():void
     {
         $artistID = $this->validateID($this->routeParams['artist_id'] ?? null, 'Artist ID');
@@ -100,6 +109,9 @@ class Artists extends \Core\Controller
 
     }
 
+    /**
+     * Create new artist
+     */
     public function createAction(): void
     {
         $result = Artist::add($_POST);

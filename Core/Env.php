@@ -5,6 +5,11 @@ use App\Config;
 
 class Env
 {
+    /**
+     * Method for getting variables from env file
+     * @param $key - the key to find
+     * @return string|null - the variable or null if not found
+     */
     static function getEnvVariable($key): string|null
     {
         if (!file_exists(Config::$ROOT_PATH . '/.env')) {

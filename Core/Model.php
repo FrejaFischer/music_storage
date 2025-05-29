@@ -17,6 +17,10 @@ abstract class Model
     private const DB_CONN_ERROR = 'Database connection unsuccessful';
     private const DB_SQL_ERROR = 'Database query unsuccessful';
 
+    /**
+     * Connects to database, creates PDO
+     * @return PDO
+     */
     protected static function getDB(): PDO
     {
         static $db = null;
@@ -43,7 +47,7 @@ abstract class Model
      /**
      * For SELECTs, it returns the query results as an associative array.
      * For INSERTs, it returns the new PK value.
-     * For DELETEs, it returns whether some rows has been affected.
+     * For DELETEs and UPDATEs, it returns whether some rows has been affected.
      */
     protected static function execute(string $sql, array $params = []): array|int|bool
     {

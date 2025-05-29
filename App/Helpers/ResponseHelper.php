@@ -4,6 +4,12 @@ namespace App\Helpers;
 
 class ResponseHelper
 {
+    /**
+     * Send JSON response, with success status
+     * @param mixed $data - The data to send
+     * @param array $links - The HATEOAS links
+     * @param int $statusCode (optional) - The status code, default 200
+     */
     public static function jsonResponse(mixed $data, array $links, ?int $statusCode = 200): void
     {
         http_response_code($statusCode);

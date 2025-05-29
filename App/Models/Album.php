@@ -9,6 +9,10 @@ class Album extends \Core\Model
 {
     public const MAX_TITLE_LENGTH = 160;
 
+    /**
+     * Method for getting all albums
+     * @return array of results
+     */
     public static function getAll(): array
     {
         $sql = <<<'SQL'
@@ -19,6 +23,11 @@ class Album extends \Core\Model
         return self::execute($sql);
     }
 
+    /**
+     * Method for searching for album by title
+     * @param string $searchText - The title to search for
+     * @return array of results
+     */
     public static function search(string $searchText): array
     {
         $sql = <<<'SQL'
@@ -36,6 +45,11 @@ class Album extends \Core\Model
         ]);
     }
 
+    /**
+     * Method for getting album by id
+     * @param int $albumID - The id of the album
+     * @return array of result
+     */
     public static function get(int $albumID): array
     {
         $sql = <<<'SQL'
@@ -49,6 +63,11 @@ class Album extends \Core\Model
         ]);
     }
 
+    /**
+     * Method for getting an albums tracks
+     * @param int $albumID - the album to get tracks from
+     * @return array of tracks + their genre and media type
+     */
     public static function getTracks(int $albumID): array
     {
         $sql = <<<'SQL'
@@ -73,6 +92,11 @@ class Album extends \Core\Model
         ]);
     }
 
+    /**
+     * Method for deleting an album
+     * @param int $albumID - the album to delete
+     * @return bool - true if row affected, false if not
+     */
     public static function delete(int $albumID): bool
     {
         $sql = <<<'SQL'
@@ -84,6 +108,11 @@ class Album extends \Core\Model
         ]);
     }
 
+    /**
+     * Method for validating an album title
+     * @param string $title - to validate
+     * @return array of errors, empty if no errors
+     */
     private static function validateTitle(string $title): array
     {
         $errors = [];
@@ -96,6 +125,11 @@ class Album extends \Core\Model
         return $errors;
     }
 
+    /**
+     * Method for validating an albums artist_id
+     * @param int $artistId - to validate
+     * @return array of errors, empty if no errors
+     */
     private static function validateArtistId(int $artistId): array
     {
         $errors = [];
@@ -111,6 +145,11 @@ class Album extends \Core\Model
         return $errors;
     }
 
+    /**
+     * Method for inserting new album
+     * @param array $columns - the data to insert
+     * @return int|array - the id of the new album or array of validation errors
+     */
     public static function add(array $columns): int|array
     {
         $validationErrors = [];
