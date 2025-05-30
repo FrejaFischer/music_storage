@@ -47,6 +47,7 @@
         // Whitelisted public paths (no key required)
         $publicPaths = [Config::$BASE_URL]; // The base of the API
 
+        // Find the endpoint without query params
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         if (in_array($path, $publicPaths)) {
