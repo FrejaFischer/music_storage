@@ -59,7 +59,7 @@ Logger::LogRequest($requestInfo);
 /**
  * Set headers for API response
  */
-header('X-Content-Type-Options: nosniff'); // Ensures the content-type header should be respected and not changed
+header('X-Content-Type-Options: nosniff'); // Ensures the content-type header should be respected and not changed. So that it doesn't think its html and execute it -> XSS
 header('Content-Type: application/json');
 
 /**

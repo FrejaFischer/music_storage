@@ -42,6 +42,17 @@ class Router
 
         // Store the route + $method in routes (the same endpoints gets multiple method keys with the params as values)
         $this->routes[$route][$method] = $params;
+
+        // e.g:
+        // '#^/artists/(?P<id>[a-zA-Z0-9_-]+)$#' => [
+        //'GET' => [
+        //    'controller' => 'Artists',
+        //    'action' => 'find'
+        //],
+        //'DELETE' => [
+        //    'controller' => 'Artists',
+        //    'action' => 'delete'
+        //]
     }
 
     /**
