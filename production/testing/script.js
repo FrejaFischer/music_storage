@@ -1,5 +1,5 @@
-// const fetchURL = "http://digital-media-api.infinityfreeapp.com/api/"; // Production
-const fetchURL = "http://localhost:8888/exam/music_storage/public/"; // Development
+const fetchURL = "http://digital-media-api.infinityfreeapp.com/api/"; // Production
+// const fetchURL = "http://localhost:8888/exam/music_storage/public/"; // Development
 
 // Fetch function
 function testApi(e, endpoint, method = "GET", body = null) {
